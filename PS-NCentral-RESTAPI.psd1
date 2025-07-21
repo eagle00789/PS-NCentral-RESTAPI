@@ -5,7 +5,7 @@
     Author = 'eagle00789'
     Description = 'PowerShell module for the N-central REST-API'
 	PowerShellVersion = '5.1'
-    FunctionsToExport = @('Connect-Ncentral', 'Get-NcentralApiServerInfo')
+    FunctionsToExport = @('Connect-Ncentral', 'Get-NcentralApiServerInfo', 'New-NcentralCustomer', 'Get-NcentralCustomProperties', 'Get-NcentralApiServerHealth')
     CmdletsToExport = @()
     VariablesToExport = @()
     AliasesToExport = @()
