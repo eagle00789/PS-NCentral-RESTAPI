@@ -10,13 +10,13 @@ All endpoints that are currently marked as preview in the API of N-Central, will
 
 ## Remaining Categories
 
-The list below is based on the NFR unit running N-Central 2025.3.1.1 provider by N-Able
+The list below is based on the NFR unit running N-Central 2025.3.1.1 provider by N-Able.
+API Endpoints that only list other links will not be included
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
-
-- Access Groups (5/5)
+- Access Groups (4/4)
 - Active Issues (1/1)
-- API-Service (2/5)
-- Authentication (3/4)
+- API-Service (1/4)
+- Authentication (0/3)
 - Custom Properties (8/9)
 - Device Filters (1/1)
 - Device Tasks (1/1)
@@ -24,14 +24,14 @@ Behind each category is a number defining how many API endpoints are remaining o
 - Job Statuses (1/1)
 - Maintenance Windows (4/4)
 - Organisation Units (13/14)
-- PSA (5/5)
+- PSA (2/2)
 - Registration Tokens (3/3)
-- Scheduled Tasks (5/5)
+- Scheduled Tasks (4/4)
 - User Roles (3/3)
-- Users (2/2)
+- Users (1/1)
 
-Total Endpoints: 73
-Finished Endpoints: 6
+Total Endpoints: 65
+Finished Endpoints: 8
 
 ## Contribute
 
