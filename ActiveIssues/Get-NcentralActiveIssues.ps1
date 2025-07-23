@@ -4,7 +4,7 @@ function Get-NcentralActiveIssues {
 Get a list of all active issues for a specified customer
 
 .DESCRIPTION
-This function gets a list of all custom properties and it's value for a given SoId
+This function gets a list of all active issues for a given CustomerID
 
 .PARAMETER CustomerID
 Optional. The Customer ID. Defaults to 50 if not specified.
@@ -16,9 +16,9 @@ Optional. Gets a specific page with a specified number of items if there are mor
 Optional. Sets how many items should be fetched per page. Defaults to 50 if not specified.
 
 .EXAMPLE
-Get-NcentralCustomProperties -CustomerID 50
+Get-NcentralActiveIssues -CustomerID 50
 
-This example creates a new customer record for Acme Corp with a contact email address.
+This example fetches all active issues for a customer with ID 50
 
 #>
     [cmdletbinding()]
