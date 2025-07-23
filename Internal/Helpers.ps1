@@ -74,8 +74,12 @@ This will connect to the NCentral server hosted on ncentral.example.com using th
 
         $ServerInfo = Get-NcentralApiServerInfo
 
-        Write-Host "Succesfully connected to N-Central version $($ServerInfo.ncentral) on $BaseUrl" -ForegroundColor Yellow
+        Write-Information "Succesfully connected to N-Central version $($ServerInfo.ncentral) on $BaseUrl" -InformationAction Continue
     } catch {
         Write-Error "Failed to authenticate: $_"
     }
+}
+
+function Show-Warning {
+    Write-Warning "This feature is still in preview and is subject to change in future versions."
 }

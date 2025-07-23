@@ -124,6 +124,8 @@ This example creates a new customer record for Acme Corp with a contact email ad
         [string]$licenseType
     )
 
+    Show-Warning
+
     $body = @{
         customerName      = $customerName
         contactFirstName  = $contactFirstName
@@ -150,7 +152,6 @@ This example creates a new customer record for Acme Corp with a contact email ad
             $body.Remove($key)
         }
     }
-    write-host $body
     $uri = "$script:BaseUrl/api/service-orgs/$SoId/customers"
     return Invoke-NcentralApi -Uri $uri -Method "POST" -Body $Body
 }

@@ -35,3 +35,16 @@ jobs:
 
         Write-Host "Publishing module from: $($manifest.FullName)"
         Publish-Module -Path $manifest.Directory.FullName -NuGetApiKey $env:PSGALLERY_API_KEY
+
+        $nupkg = Get-ChildItem -Path $manifest.Directory.FullName -Filter *.nupkg | Select-Object -First 1
+        "$($nupkg.FullName)" | Out-File -FilePath "$env:GITHUB_ENV" -Append -Encoding utf8
+        echo "NUPKG_PATH=$($nupkg.FullName)" >> $env:GITHUB_ENV
+
+      shell: powershell
+
+    - name: Create GitHub Release and upload NuPkg
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ env.NUPKG_PATH }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

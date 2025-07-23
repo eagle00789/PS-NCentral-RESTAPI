@@ -14,11 +14,15 @@ Get-NcentralCustomProperties -SoId 50
 
 This example creates a new customer record for Acme Corp with a contact email address.
 
-#>[cmdletbinding()]
+#>
+    [cmdletbinding()]
     param(
         [Parameter(Mandatory = $false)]
         [int]$SoId = 50
     )
+
+    Show-Warning
+    
     $uri = "$script:BaseUrl/api/org-units/$SoId/custom-properties"
     return Invoke-NcentralApi -Uri $uri -Method "GET"
 }
