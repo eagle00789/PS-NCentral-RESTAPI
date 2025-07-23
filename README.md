@@ -19,7 +19,7 @@ API Endpoints that only list other links will not be included
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
 - Access Groups (4/4)
 - Active Issues (0/1)
-- API-Service (0/4)
+- API-Service (1/4)
 - Authentication (0/3)
 - Custom Properties (8/9)
 - Device Filters (1/1)
@@ -36,7 +36,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 
 Total Endpoints: 65
 
-Finished Endpoints: 10
+Finished Endpoints: 9
 
 ## Contribute
 

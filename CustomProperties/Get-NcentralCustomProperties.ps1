@@ -18,7 +18,7 @@ Optional. Sets how many items should be fetched per page. Defaults to 50 if not 
 .EXAMPLE
 Get-NcentralCustomProperties -SoId 50
 
-This example creates a new customer record for Acme Corp with a contact email address.
+This example fetches the custom properties defined in N-Central for SoID 50
 
 #>
     [cmdletbinding()]

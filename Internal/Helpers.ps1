@@ -85,6 +85,26 @@ This will connect to the NCentral server hosted on ncentral.example.com using th
     }
 }
 
+function Disconnect-Ncentral {
+<#
+.SYNOPSIS
+Disconnect from N-Central
+
+.DESCRIPTION
+This function will disconnect from the REST API of N-Central 
+
+.EXAMPLE
+Disconnect-Ncentral 
+
+This will disconnect from the NCentral server you previously connected to
+
+#>
+    [cmdletbinding()]
+	param ()
+    $script:AccessToken = $null
+    $script:RefreshToken = $null
+}
+
 function Show-Warning {
     Write-Warning "This feature is still in preview and is subject to change in future versions."
 }
