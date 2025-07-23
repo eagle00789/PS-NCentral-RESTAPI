@@ -10,7 +10,15 @@
     VariablesToExport = @()
     AliasesToExport = @()
     PrivateData = @{}
-    FilesToExclude = @(
-        '.github\*'
+    FileList = @(
+        'LICENSE',
+	'PS-NCentral-RESTAPI.psd1',
+	'PS-NCentral-RESTAPI.psm1',
+	'README.md',
+ 	'Internal\Helpers.ps1'
+	'API-Service\Get-NcentralApiServerHealth.ps1',
+	'API-Service\Get-NcentralApiServerInfo.ps1',
+	'CustomProperties\Get-NcentralCustomProperties.ps1',
+	'OrganizationUnits\New-NcentralCustomer.ps1',
     )
 }
