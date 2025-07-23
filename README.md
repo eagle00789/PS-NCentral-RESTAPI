@@ -1,6 +1,8 @@
 # PS-NCentral-RESTAPI
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eagle00789/PS-NCentral-RESTAPI/publish.yml)
+![GitHub contributors](https://img.shields.io/github/contributors-anon/eagle00789/PS-NCentral-RESTAPI)
+![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/PS-NCentral-RESTAPI?label=PS%20Gallery%20downloads)
 
 This module will be expanded to allow for the full range of N-Central Rest API functions to be included.
 
@@ -11,11 +13,13 @@ All endpoints that are currently marked as preview in the API of N-Central, will
 ## Remaining Categories
 
 The list below is based on the NFR unit running N-Central 2025.3.1.1 provider by N-Able.
+
 API Endpoints that only list other links will not be included
+
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
 - Access Groups (4/4)
-- Active Issues (1/1)
-- API-Service (1/4)
+- Active Issues (0/1)
+- API-Service (0/4)
 - Authentication (0/3)
 - Custom Properties (8/9)
 - Device Filters (1/1)
@@ -31,7 +35,8 @@ Behind each category is a number defining how many API endpoints are remaining o
 - Users (1/1)
 
 Total Endpoints: 65
-Finished Endpoints: 8
+
+Finished Endpoints: 10
 
 ## Contribute
 
