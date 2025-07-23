@@ -4,7 +4,8 @@ function Invoke-NcentralApi {
         [Parameter(Mandatory)] [string] $Uri,
         [Parameter(Mandatory)] [string] $Method,
         [object] $Body = $null,
-        [hashtable] $Query = $null
+        [hashtable] $Query = $null,
+        [boolean] $ConvertToJson = $True
     )
 
     try {
@@ -18,7 +19,11 @@ function Invoke-NcentralApi {
         }
 
         if ($Body -ne $null) {
-            $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers -Body ($Body | ConvertTo-Json -Depth 5) -ContentType "application/json"
+            if ($ConvertToJson) {
+                $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers -Body ($Body | ConvertTo-Json -Depth 5) -ContentType "application/json"
+            } else {
+                $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers -Body $Body -ContentType "text/plain"
+            }
         } else {
             $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers
         }
