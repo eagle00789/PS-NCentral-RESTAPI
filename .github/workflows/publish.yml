@@ -1,0 +1,40 @@
+name: Publish PowerShell Module
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up PowerShell
+      uses: actions/setup-powershell@v2
+
+    - name: Install Required Module
+      shell: pwsh
+      run: |
+        Install-Module -Name PowerShellGet -Force -Scope CurrentUser -AllowClobber
+
+    - name: Publish to PowerShell Gallery
+      shell: pwsh
+      env:
+        PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
+      run: |
+        # Find the module manifest (.psd1)
+        $manifest = Get-ChildItem -Path . -Filter *.psd1 -Recurse | Select-Object -First 1
+
+        if (-not $manifest) {
+          Write-Error "Module manifest not found!"
+          exit 1
+        }
+
+        Write-Host "Publishing module from: $($manifest.FullName)"
+        Publish-Module -Path $manifest.Directory.FullName -NuGetApiKey $env:PSGALLERY_API_KEY
