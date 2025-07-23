@@ -10,4 +10,7 @@
     VariablesToExport = @()
     AliasesToExport = @()
     PrivateData = @{}
+    FilesToExclude = @(
+        '.github\*',
+    )
 }
