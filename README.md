@@ -1,14 +1,18 @@
+# PS-NCentral-RESTAPI
+
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eagle00789/PS-NCentral-RESTAPI/publish.yml)
 
-# PS-NCentral-RESTAPI
 This module will be expanded to allow for the full range of N-Central Rest API functions to be included.
 
 ## PREVIEW API Endpoints
+
 All endpoints that are currently marked as preview in the API of N-Central, will always output a warning on the console stating that the endpoint is still a preview.
 
 ## Remaining Categories
+
 The list below is based on the NFR unit running N-Central 2025.3.1.1 provider by N-Able
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
+
 - Access Groups (5/5)
 - Active Issues (1/1)
 - API-Service (2/5)
@@ -30,7 +34,9 @@ Total Endpoints: 73
 Finished Endpoints: 6
 
 ## Contribute
+
 If you would like to contribute, then please follow the below guide.
+
 1. Fork this repository
 2. If needed, create a new folder with the API Category as name.
 3. Inside the folder, create a new file PER api endpoint. We are aware that this will create many files, but it makes managing the API structure much easier.
@@ -42,5 +48,6 @@ If you would like to contribute, then please follow the below guide.
 9. Create a pull request and include a clear description of which API you added to this module
 
 ## Authors
+
 - [eagle00789](https://github.com/eagle00789)
-- Add your clickable username here. It should point to your GitHub account. 
+- [CasperStekelenburg](https://github.com/CasperStekelenburg)
