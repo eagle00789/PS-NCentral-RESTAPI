@@ -40,8 +40,6 @@ jobs:
         "$($nupkg.FullName)" | Out-File -FilePath "$env:GITHUB_ENV" -Append -Encoding utf8
         echo "NUPKG_PATH=$($nupkg.FullName)" >> $env:GITHUB_ENV
 
-      shell: powershell
-
     - name: Create GitHub Release and upload NuPkg
       uses: softprops/action-gh-release@v1
       with:
