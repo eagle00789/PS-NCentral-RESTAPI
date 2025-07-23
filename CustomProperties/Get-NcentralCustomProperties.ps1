@@ -12,7 +12,7 @@ Optional. The Service Organization ID. Defaults to 50 if not specified.
 .PARAMETER PageNumber
 Optional. Gets a specific page with a specified number of items if there are more items to show then PageSize. Defaults to 1 if not specified
 
-.PARAMETER SoId
+.PARAMETER PageSize
 Optional. Sets how many items should be fetched per page. Defaults to 50 if not specified.
 
 .EXAMPLE
