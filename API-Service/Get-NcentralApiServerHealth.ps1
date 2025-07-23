@@ -11,6 +11,8 @@ Get-NcentralApiServerHealth
 
 #>
     [cmdletbinding()]
+    param()
+    
     $uri = "$script:BaseUrl/api/health"
     return Invoke-NcentralApi -Uri $uri -Method "GET"
 }

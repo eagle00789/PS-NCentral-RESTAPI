@@ -11,7 +11,7 @@ The list below is based on the NFR unit running N-Central 2025.3.1.1 provider by
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
 - Access Groups (5/5)
 - Active Issues (1/1)
-- API-Service (3/5)
+- API-Service (2/5)
 - Authentication (3/4)
 - Custom Properties (8/9)
 - Device Filters (1/1)
@@ -27,7 +27,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 - Users (2/2)
 
 Total Endpoints: 73
-Finished Endpoints: 5
+Finished Endpoints: 6
 
 ## Contribute
 If you would like to contribute, then please follow the below guide.
@@ -37,7 +37,7 @@ If you would like to contribute, then please follow the below guide.
 4. Inside your file, always create a proper header so that the Get-Help command lists usefull information
 5. ALWAYS include [cmdletbinding()] in your new API Endpoint function
 6. If a API Endpoint you are including still has been marked as PREVIEW in the API, the include the line Show-Warning below your parameter section if present, or after [cmdletbinding()] if no parameters are present.
-7. Update the PS-NCentral-RESTAPI.psd1 to include your new folder\file in the FileList
+7. Update the PS-NCentral-RESTAPI.psd1 to include your new function in the FunctionsToExport
 8. Add your name to the authors list below in this README.md file
 9. Create a pull request and include a clear description of which API you added to this module
 
