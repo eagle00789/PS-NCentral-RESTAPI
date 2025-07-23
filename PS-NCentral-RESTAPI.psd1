@@ -11,6 +11,6 @@
     AliasesToExport = @()
     PrivateData = @{}
     FilesToExclude = @(
-        '.github\*',
+        '.github\*'
     )
 }
