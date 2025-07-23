@@ -16,5 +16,5 @@ Get-NcentralApiServerInfoExtra
     Show-Warning
 
     $uri = "$script:BaseUrl/api/server-info/extra"
-    return Invoke-NcentralApi -Uri $uri -Method "GET"
+    return (Invoke-NcentralApi -Uri $uri -Method "GET").data._extra
 }
