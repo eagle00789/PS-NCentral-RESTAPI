@@ -24,19 +24,19 @@ Behind each category is a number defining how many API endpoints are remaining o
 - Custom Properties (8/9)
 - Device Filters (1/1)
 - Device Tasks (1/1)
-- Devices (10/10)
+- Devices (11/11)
 - Job Statuses (1/1)
 - Maintenance Windows (4/4)
 - Organisation Units (13/14)
 - PSA (2/2)
-- Registration Tokens (3/3)
+- Registration Tokens (0/3)
 - Scheduled Tasks (4/4)
 - User Roles (3/3)
 - Users (1/1)
 
-Total Endpoints: 65
+Total Endpoints: 66
 
-Finished Endpoints: 9
+Finished Endpoints: 12
 
 ## Contribute
 
