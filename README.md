@@ -114,19 +114,14 @@ Total Endpoints: 74
 
 Finished Endpoints (including the endpoints that won't be implemented): 24
 
+## Future enhancements
+
+Currently not all API endpoints are built into this module. The missing endpoints are still being added to this module.
+None of the endpoints that have paging, have the sortby and select parameter implemented. This still has to be implemented.
+
 ## Contribute
 
-If you would like to contribute, then please follow the below guide.
-
-1. Fork this repository
-2. If needed, create a new folder with the API Category as name.
-3. Inside the folder, create a new file PER api endpoint. We are aware that this will create many files, but it makes managing the API structure much easier.
-4. Inside your file, always create a proper header so that the Get-Help command lists usefull information
-5. ALWAYS include [cmdletbinding()] in your new API Endpoint function
-6. If a API Endpoint you are including still has been marked as PREVIEW in the API, the include the line Show-Warning below your parameter section if present, or after [cmdletbinding()] if no parameters are present.
-7. Update the PS-NCentral-RESTAPI.psd1 to include your new function in the FunctionsToExport
-8. Add your name to the authors list below in this README.md file
-9. Create a pull request and include a clear description of which API you added to this module
+If you would like to contribute, then please read our [CONTRIBUTING](./github/CONTRIBUTING.md) document
 
 ## Authors
 
