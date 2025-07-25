@@ -108,11 +108,11 @@ Behind each category is a number defining how many API endpoints are remaining o
   - GET /api/org-units/{orgUnitId}/user-roles/{userRoleId}
 - Users (1/2)
   - ~~GET /api/users > won't be implemented as it only returns a list of available endpoints~~
-  - GET /api/org-units/{orgUnitId}/users
+  - GET /api/org-units/{orgUnitId}/users > Get-NcentralUsers
 
 Total Endpoints: 74
 
-Finished Endpoints (including the endpoints that won't be implemented): 21
+Finished Endpoints (including the endpoints that won't be implemented): 22
 
 ## Contribute
 

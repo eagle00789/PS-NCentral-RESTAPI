@@ -30,7 +30,8 @@ function Invoke-NcentralApi {
 
         return $response
     } catch {
-        $code = $_.Exception.Response.StatusCode.value__
+        $code = $null
+        try { $code = $_.Exception.Response.StatusCode.value__ } catch {}
         if ($code -eq 401) {
             Write-Warning "Authentication failed or expired. Please reconnect using Connect-Ncentral."
         } elseif ($code -eq 429) {
@@ -38,6 +39,7 @@ function Invoke-NcentralApi {
         } else {
             Write-Error "API call failed with HTTP $code : $_"
         }
+        return $null
     }
 }
 
