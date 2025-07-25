@@ -18,6 +18,9 @@ Optional. Specifies the number of users to retrieve per page. Defaults to 50 if 
 .PARAMETER All
 Optional. If specified, retrieves all users across all pages
 
+.PARAMETER SortOrder
+Optional. Specifies the sort order of the results. Valid case-insensitive input is asc, ascending, desc, descending
+
 .EXAMPLE
 Get-NcentralUsers -orgUnitID 50
 
