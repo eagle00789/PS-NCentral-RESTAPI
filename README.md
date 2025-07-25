@@ -121,7 +121,7 @@ None of the endpoints that have paging, have the sortby and select parameter imp
 
 ## Contribute
 
-If you would like to contribute, then please read our [CONTRIBUTING](./github/CONTRIBUTING.md) document
+If you would like to contribute, then please read our [CONTRIBUTING](./.github/CONTRIBUTING.md) document
 
 ## Authors
 
