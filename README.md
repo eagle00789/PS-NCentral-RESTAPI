@@ -6,13 +6,17 @@
 
 This module will be expanded to allow for the full range of N-Central Rest API functions to be included.
 
+## Powershell Gallery
+
+This module is published on the powershell gallery, however the version on Powershell Gallery my nopt be the same as the version on GitHub
+
 ## PREVIEW API Endpoints
 
 All endpoints that are currently marked as preview in the API of N-Central, will always output a warning on the console stating that the endpoint is still a preview.
 
 ## Remaining Categories
 
-The list below is based on the NFR unit running N-Central 2025.3.1.1 provider by N-Able.
+The list below is based on the NFR unit running N-Central 2025.3.1.1 provided by N-Able.
 
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
 - Access Groups (4/5)
