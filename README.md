@@ -102,17 +102,17 @@ Behind each category is a number defining how many API endpoints are remaining o
   - GET /api/scheduled-tasks/{taskId}
   - GET /api/scheduled-tasks/{taskId}/status
   - GET /api/scheduled-tasks/{taskId}/status/details
-- User Roles (3/3)
-  - GET /api/org-units/{orgUnitId}/user-roles
+- User Roles (1/3)
+  - GET /api/org-units/{orgUnitId}/user-roles > Get-NcentralUserRoles
   - POST /api/org-units/{orgUnitId}/user-roles
-  - GET /api/org-units/{orgUnitId}/user-roles/{userRoleId}
-- Users (1/2)
+  - GET /api/org-units/{orgUnitId}/user-roles/{userRoleId} > Get-NcentralUserRoles
+- Users (0/2)
   - ~~GET /api/users > won't be implemented as it only returns a list of available endpoints~~
   - GET /api/org-units/{orgUnitId}/users > Get-NcentralUsers
 
 Total Endpoints: 74
 
-Finished Endpoints (including the endpoints that won't be implemented): 22
+Finished Endpoints (including the endpoints that won't be implemented): 24
 
 ## Contribute
 
