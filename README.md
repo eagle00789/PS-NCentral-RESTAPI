@@ -14,29 +14,101 @@ All endpoints that are currently marked as preview in the API of N-Central, will
 
 The list below is based on the NFR unit running N-Central 2025.3.1.1 provider by N-Able.
 
-API Endpoints that only list other links will not be included
-
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
-- Access Groups (4/4)
+- Access Groups (4/5)
+  - POST /api/org-units/{orgUnitId}/device-access-groups
+  - GET /api/org-units/{orgUnitId}/access-groups
+  - POST /api/org-units/{orgUnitId}/access-groups
+  - ~~GET /api/access-groups > won't be implemented as it only returns a list of available endpoints~~
+  - GET /api/access-groups/{accessGroupId}
 - Active Issues (0/1)
-- API-Service (1/4)
-- Authentication (0/3)
+  - GET /api/org-units/{orgUnitId}/active-issues > Get-NcentralActiveIssues
+- API-Service (0/5)
+  - ~~POST /api/server-info/extra/authenticated > Won't be implemented as it's a duplicate of the API Endpoint /api/server-info/extra with extra steps.~~
+  - ~~GET /api > won't be implemented as it only returns a list of available endpoints~~
+  - GET /api/server-info > Get-NcentralApiServerInfo
+  - GET /api/server-info/extra > Get-NCentralApiServerInfoExtra
+  - GET /api/health > Get-NcentralApiServerHealth
+- Authentication (0/4)
+  - POST /api/auth/refresh > Get-NcentralAuthenticationRefresh
+  - POST /api/auth/authenticate > Connect-Ncentral
+  - ~~GET /api/auth > won't be implemented as it only returns a list of available endpoints~~
+  - GET /api/auth/validate > Get-NcentralAuthenticationValidation
 - Custom Properties (8/9)
+  - PUT /api/org-units/{orgUnitId}/org-custom-property-defaults
+  - GET /api/org-units/{orgUnitId}/custom-properties/{propertyId}
+  - PUT /api/org-units/{orgUnitId}/custom-properties/{propertyId}
+  - GET /api/devices/{deviceId}/custom-properties/{propertyId}
+  - PUT /api/devices/{deviceId}/custom-properties/{propertyId}
+  - GET /api/org-units/{orgUnitId}/org-custom-property-defaults/{propertyId}
+  - GET /api/org-units/{orgUnitId}/custom-properties > Get-NcentralCustomProperties
+  - GET /api/org-units/{orgUnitId}/custom-properties/device-custom-property-defaults/{propertyId}
+  - GET /api/devices/{deviceId}/custom-properties
 - Device Filters (1/1)
+  - GET /api/device-filters
 - Device Tasks (1/1)
+  - GET /api/devices/{deviceId}/scheduled-tasks
 - Devices (11/11)
+  - GET /api/devices/{deviceId}/assets/lifecycle-info
+  - PUT /api/devices/{deviceId}/assets/lifecycle-info
+  - PATCH /api/devices/{deviceId}/assets/lifecycle-info
+  - POST /api/device
+  - GET /api/org-units/{orgUnitId}/devices
+  - GET /api/devices
+  - GET /api/devices/{deviceId}
+  - GET /api/devices/{deviceId}/service-monitor-status
+  - GET /api/devices/{deviceId}/assets
+  - GET /api/devices/{deviceId}/activation-key
+  - GET /api/appliance-tasks/{taskId}
 - Job Statuses (1/1)
+  - GET /api/org-units/{orgUnitId}/job-statuses
 - Maintenance Windows (4/4)
+  - PUT /api/devices/maintenance-windows
+  - POST /api/devices/maintenance-windows
+  - DELETE /api/devices/maintenance-windows
+  - GET /api/devices/{deviceId}/maintenance-windows
 - Organisation Units (13/14)
-- PSA (2/2)
+  - GET /api/service-orgs
+  - POST /api/service-orgs
+  - GET /api/service-orgs/{soId}/customers
+  - POST /api/service-orgs/{soId}/customers > New-NcentralCustomer
+  - GET /api/customers/{customerId}/sites
+  - POST /api/customers/{customerId}/sites
+  - GET /api/sites
+  - GET /api/sites/{siteId}
+  - GET /api/service-orgs/{soId}
+  - GET /api/org-units
+  - GET /api/org-units/{orgUnitId}
+  - GET /api/org-units/{orgUnitId}/children
+  - GET /api/customers
+  - GET /api/customers/{customerId}
+- PSA (2/5)
+  - POST /api/standard-psa/{psaType}/credential
+  - POST /api/custom-psa/tickets/{customPsaTicketId}
+  - ~~GET /api/standard-psa > won't be implemented as it only returns a list of available endpoints~~
+  - ~~GET /api/custom-psa > won't be implemented as it only returns a list of available endpoints~~
+  - ~~GET /api/custom-psa/tickets > won't be implemented as it only returns a list of available endpoints~~
 - Registration Tokens (0/3)
-- Scheduled Tasks (4/4)
+  - GET /api/sites/{siteId}/registration-token > Get-NcentralRegistrationToken
+  - GET /api/org-units/{orgUnitId}/registration-token > Get-NcentralRegistrationToken
+  - GET /api/customers/{customerId}/registration-token > Get-NcentralRegistrationToken
+- Scheduled Tasks (4/5)
+  - POST /api/scheduled-tasks/direct
+  - ~~GET /api/scheduled-tasks > won't be implemented as it only returns a list of available endpoints~~
+  - GET /api/scheduled-tasks/{taskId}
+  - GET /api/scheduled-tasks/{taskId}/status
+  - GET /api/scheduled-tasks/{taskId}/status/details
 - User Roles (3/3)
-- Users (1/1)
+  - GET /api/org-units/{orgUnitId}/user-roles
+  - POST /api/org-units/{orgUnitId}/user-roles
+  - GET /api/org-units/{orgUnitId}/user-roles/{userRoleId}
+- Users (1/2)
+  - ~~GET /api/users > won't be implemented as it only returns a list of available endpoints~~
+  - GET /api/org-units/{orgUnitId}/users
 
-Total Endpoints: 66
+Total Endpoints: 74
 
-Finished Endpoints: 12
+Finished Endpoints (including the endpoints that won't be implemented): 21
 
 ## Contribute
 
