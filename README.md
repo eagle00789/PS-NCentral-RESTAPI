@@ -70,7 +70,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - PUT /api/devices/maintenance-windows
   - POST /api/devices/maintenance-windows
   - DELETE /api/devices/maintenance-windows
-  - GET /api/devices/{deviceId}/maintenance-windows
+  - GET /api/devices/{deviceId}/maintenance-windows > Get-NcentralMaintenanceWindows
 - Organisation Units (13/14)
   - GET /api/service-orgs
   - POST /api/service-orgs
@@ -112,7 +112,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 
 Total Endpoints: 74
 
-Finished Endpoints (including the endpoints that won't be implemented): 24
+Finished Endpoints (including the endpoints that won't be implemented): 25
 
 ## Future enhancements
 
