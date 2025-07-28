@@ -20,30 +20,30 @@ jobs:
       shell: pwsh
       env:
         PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
-    run: |
-      # Find the module manifest (.psd1)
-      $manifest = Get-ChildItem -Path . -Filter *.psd1 -Recurse | Select-Object -First 1
+      run: |
+        # Find the module manifest (.psd1)
+        $manifest = Get-ChildItem -Path . -Filter *.psd1 -Recurse | Select-Object -First 1
 
-      if (-not $manifest) {
-        Write-Error "Module manifest not found!"
-        exit 1
-      }
+        if (-not $manifest) {
+          Write-Error "Module manifest not found!"
+          exit 1
+        }
 
-      $moduleDir = $manifest.Directory.FullName
-      $publishDir = Join-Path -Path $env:RUNNER_TEMP -ChildPath "publish"
+        $moduleDir = $manifest.Directory.FullName
+        $publishDir = Join-Path -Path $env:RUNNER_TEMP -ChildPath "publish"
 
-      # Clean up any previous publish dir
-      if (Test-Path $publishDir) {
-        Remove-Item -Recurse -Force $publishDir
-      }
-      New-Item -ItemType Directory -Path $publishDir | Out-Null
+        # Clean up any previous publish dir
+        if (Test-Path $publishDir) {
+          Remove-Item -Recurse -Force $publishDir
+        }
+        New-Item -ItemType Directory -Path $publishDir | Out-Null
 
-      # Copy only necessary files
-      Copy-Item -Path (Join-Path $moduleDir '*') -Destination $publishDir -Recurse -Exclude '.github','*.git','*.vscode'
+        # Copy only necessary files
+        Copy-Item -Path (Join-Path $moduleDir '*') -Destination $publishDir -Recurse -Exclude '.github','*.git','*.vscode'
 
-      # Double-check contents (optional)
-      Write-Host "Files prepared for publishing:"
-      Get-ChildItem -Path $publishDir -Recurse | ForEach-Object { Write-Host $_.FullName }
+        # Double-check contents (optional)
+        Write-Host "Files prepared for publishing:"
+        Get-ChildItem -Path $publishDir -Recurse | ForEach-Object { Write-Host $_.FullName }
 
-      # Publish the module from the clean publish directory
-      Publish-Module -Path $publishDir -NuGetApiKey $env:PSGALLERY_API_KEY
+        # Publish the module from the clean publish directory
+        Publish-Module -Path $publishDir -NuGetApiKey $env:PSGALLERY_API_KEY
