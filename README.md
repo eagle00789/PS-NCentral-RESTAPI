@@ -8,7 +8,8 @@ This module will be expanded to allow for the full range of N-Central Rest API f
 
 ## Powershell Gallery
 
-This module is published on the powershell gallery, however the version on Powershell Gallery my nopt be the same as the version on GitHub
+This module is published on the powershell gallery, however the version on Powershell Gallery my not be the same as the version on GitHub.
+The Powershell Gallery version can be found at [Powershell Gallery](https://www.powershellgallery.com/packages/PS-NCentral-RESTAPI)
 
 ## PREVIEW API Endpoints
 
