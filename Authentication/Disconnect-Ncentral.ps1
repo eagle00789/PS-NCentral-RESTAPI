@@ -16,4 +16,5 @@ This will disconnect from the NCentral server you previously connected to
 	param ()
     $script:AccessToken = $null
     $script:RefreshToken = $null
+    $script:Connected = $false
 }

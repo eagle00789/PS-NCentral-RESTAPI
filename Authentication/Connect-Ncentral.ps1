@@ -33,7 +33,8 @@ This will connect to the NCentral server hosted on ncentral.example.com using th
 
         $script:AccessToken = $response.tokens.access.token
         $script:RefreshToken = $response.tokens.refresh.token
-
+        $script:Connected = $true
+        
         $ServerInfo = Get-NcentralApiServerInfo
 
         Write-Information "Succesfully connected to N-Central version $($ServerInfo.ncentral) on $BaseUrl" -InformationAction Continue
