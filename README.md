@@ -21,10 +21,10 @@ The list below is based on the NFR unit running N-Central 2025.3.1.1 provided by
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
 - Access Groups (4/5)
   - POST /api/org-units/{orgUnitId}/device-access-groups
-  - GET /api/org-units/{orgUnitId}/access-groups
+  - GET /api/org-units/{orgUnitId}/access-groups > Get-NcentralAccessGroups
   - POST /api/org-units/{orgUnitId}/access-groups
   - ~~GET /api/access-groups > won't be implemented as it only returns a list of available endpoints~~
-  - GET /api/access-groups/{accessGroupId}
+  - GET /api/access-groups/{accessGroupId} > Get-NcentralAccessGroup
 - Active Issues (0/1)
   - GET /api/org-units/{orgUnitId}/active-issues > Get-NcentralActiveIssues
 - API-Service (0/5)
