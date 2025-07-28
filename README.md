@@ -51,8 +51,8 @@ Behind each category is a number defining how many API endpoints are remaining o
   - GET /api/devices/{deviceId}/custom-properties
 - Device Filters (0/1)
   - GET /api/device-filters > Get-NcentralDeviceFilters
-- Device Tasks (1/1)
-  - GET /api/devices/{deviceId}/scheduled-tasks
+- Device Tasks (0/1)
+  - GET /api/devices/{deviceId}/scheduled-tasks > Get-NcentralDeviceTasks
 - Devices (11/11)
   - GET /api/devices/{deviceId}/assets/lifecycle-info
   - PUT /api/devices/{deviceId}/assets/lifecycle-info
@@ -97,12 +97,12 @@ Behind each category is a number defining how many API endpoints are remaining o
   - GET /api/sites/{siteId}/registration-token > Get-NcentralRegistrationToken
   - GET /api/org-units/{orgUnitId}/registration-token > Get-NcentralRegistrationToken
   - GET /api/customers/{customerId}/registration-token > Get-NcentralRegistrationToken
-- Scheduled Tasks (4/5)
+- Scheduled Tasks (1/5)
   - POST /api/scheduled-tasks/direct
   - ~~GET /api/scheduled-tasks > won't be implemented as it only returns a list of available endpoints~~
-  - GET /api/scheduled-tasks/{taskId}
-  - GET /api/scheduled-tasks/{taskId}/status
-  - GET /api/scheduled-tasks/{taskId}/status/details
+  - GET /api/scheduled-tasks/{taskId} > Get-NcentralScheduledTask
+  - GET /api/scheduled-tasks/{taskId}/status > Get-NcentralScheduledTaskStatus
+  - GET /api/scheduled-tasks/{taskId}/status/details > Get-NcentralScheduledTaskStatusDetails
 - User Roles (1/3)
   - GET /api/org-units/{orgUnitId}/user-roles > Get-NcentralUserRoles
   - POST /api/org-units/{orgUnitId}/user-roles
@@ -113,7 +113,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 
 Total Endpoints: 74
 
-Finished Endpoints (including the endpoints that won't be implemented): 28
+Finished Endpoints (including the endpoints that won't be implemented): 32
 
 ## Future enhancements
 

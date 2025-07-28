@@ -15,7 +15,7 @@ Get-NcentralAccessGroups -orgUnitID 50
 This example fetches all N-Central Access Groups for a customer with ID 50
 
 #>
-    [cmdletbinding(DefaultParameterSetName = 'Paged')]
+    [cmdletbinding()]
     param(
         [Parameter(Mandatory = $True)]
         [int]$AccessGroupID

@@ -1,6 +1,6 @@
 @{
     RootModule = 'PS-NCentral-RESTAPI.psm1'
-    ModuleVersion = '0.3.7'
+    ModuleVersion = '0.3.8'
     GUID = 'b3f4c223-5dd6-4de4-a6c1-5f6e7d71c505'
     Author = 'eagle00789'
     Description = 'PowerShell module for the N-central REST-API'
@@ -22,7 +22,11 @@
         'Get-NcentralMaintenanceWindows',
         'Get-NcentralAccessGroups',
         'Get-NcentralAccessGroup',
-        'Get-NcentralDeviceFilters'
+        'Get-NcentralDeviceFilters',
+        'Get-NcentralDeviceTasks',
+        'Get-NcentralScheduledTask',
+        'Get-NcentralScheduledTaskStatus',
+        'Get-NcentralScheduledTaskStatusDetails'
     )
     CmdletsToExport = @()
     VariablesToExport = @()
