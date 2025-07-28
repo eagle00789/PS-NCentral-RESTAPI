@@ -19,7 +19,7 @@ All endpoints that are currently marked as preview in the API of N-Central, will
 The list below is based on the NFR unit running N-Central 2025.3.1.1 provided by N-Able.
 
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
-- Access Groups (4/5)
+- Access Groups (2/5)
   - POST /api/org-units/{orgUnitId}/device-access-groups
   - GET /api/org-units/{orgUnitId}/access-groups > Get-NcentralAccessGroups
   - POST /api/org-units/{orgUnitId}/access-groups
@@ -48,8 +48,8 @@ Behind each category is a number defining how many API endpoints are remaining o
   - GET /api/org-units/{orgUnitId}/custom-properties > Get-NcentralCustomProperties
   - GET /api/org-units/{orgUnitId}/custom-properties/device-custom-property-defaults/{propertyId}
   - GET /api/devices/{deviceId}/custom-properties
-- Device Filters (1/1)
-  - GET /api/device-filters
+- Device Filters (0/1)
+  - GET /api/device-filters > Get-NcentralDeviceFilters
 - Device Tasks (1/1)
   - GET /api/devices/{deviceId}/scheduled-tasks
 - Devices (11/11)
@@ -66,7 +66,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - GET /api/appliance-tasks/{taskId}
 - Job Statuses (1/1)
   - GET /api/org-units/{orgUnitId}/job-statuses
-- Maintenance Windows (4/4)
+- Maintenance Windows (3/4)
   - PUT /api/devices/maintenance-windows
   - POST /api/devices/maintenance-windows
   - DELETE /api/devices/maintenance-windows
@@ -112,7 +112,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 
 Total Endpoints: 74
 
-Finished Endpoints (including the endpoints that won't be implemented): 25
+Finished Endpoints (including the endpoints that won't be implemented): 28
 
 ## Future enhancements
 
