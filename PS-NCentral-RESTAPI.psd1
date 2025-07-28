@@ -1,6 +1,6 @@
 @{
     RootModule = 'PS-NCentral-RESTAPI.psm1'
-    ModuleVersion = '0.3.8'
+    ModuleVersion = '0.3.9'
     GUID = 'b3f4c223-5dd6-4de4-a6c1-5f6e7d71c505'
     Author = 'eagle00789'
     Description = 'PowerShell module for the N-central REST-API'
@@ -8,25 +8,25 @@
     FunctionsToExport = @(
         'Connect-Ncentral',
         'Disconnect-Ncentral',
-        'Get-NcentralApiServerInfo',
-        'New-NcentralCustomer',
-        'Get-NcentralCustomProperties',
-        'Get-NcentralApiServerHealth',
-        'Get-NcentralApiServerInfoExtra',
-        'Get-NcentralAuthenticationValidation',
-        'Get-NcentralAuthenticationRefresh',
-        'Get-NcentralActiveIssues',
-        'Get-NcentralRegistrationToken',
-        'Get-NcentralUsers',
-        'Get-NcentralUserRoles',
-        'Get-NcentralMaintenanceWindows',
-        'Get-NcentralAccessGroups',
         'Get-NcentralAccessGroup',
+        'Get-NcentralAccessGroups',
+        'Get-NcentralActiveIssues',
+        'Get-NcentralApiServerHealth',
+        'Get-NcentralApiServerInfo',
+        'Get-NcentralApiServerInfoExtra',
+        'Get-NcentralAuthenticationRefresh',
+        'Get-NcentralAuthenticationValidation',
+        'Get-NcentralCustomProperties',
         'Get-NcentralDeviceFilters',
         'Get-NcentralDeviceTasks',
+        'Get-NcentralMaintenanceWindows',
+        'Get-NcentralRegistrationToken',
         'Get-NcentralScheduledTask',
         'Get-NcentralScheduledTaskStatus',
-        'Get-NcentralScheduledTaskStatusDetails'
+        'Get-NcentralScheduledTaskStatusDetails',
+        'Get-NcentralUserRoles',
+        'Get-NcentralUsers',
+        'New-NcentralCustomer'
     )
     CmdletsToExport = @()
     VariablesToExport = @()
