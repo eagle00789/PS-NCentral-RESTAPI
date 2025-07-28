@@ -29,21 +29,27 @@ jobs:
           exit 1
         }
 
-        $moduleDir = $manifest.Directory.FullName
-        $publishDir = Join-Path -Path $env:RUNNER_TEMP -ChildPath "publish"
+        # Get module name from manifest filename (assumes <ModuleName>.psd1)
+        $moduleName = [IO.Path]::GetFileNameWithoutExtension($manifest.Name)
+        $moduleSourceDir = $manifest.Directory.FullName
 
-        # Clean up any previous publish dir
+        Write-Host "Preparing module '$moduleName' from: $moduleSourceDir"
+
+        # Create publish directory structure: .../publish/ModuleName/
+        $publishDir = Join-Path -Path $env:RUNNER_TEMP -ChildPath "publish"
+        $publishModuleDir = Join-Path -Path $publishDir -ChildPath $moduleName
+
         if (Test-Path $publishDir) {
           Remove-Item -Recurse -Force $publishDir
         }
-        New-Item -ItemType Directory -Path $publishDir | Out-Null
+        New-Item -ItemType Directory -Path $publishModuleDir -Force | Out-Null
 
-        # Copy only necessary files
-        Copy-Item -Path (Join-Path $moduleDir '*') -Destination $publishDir -Recurse -Exclude '.github','*.git','*.vscode'
+        # Copy only necessary module files (.psd1, .psm1, etc.)
+        Copy-Item -Path "$moduleSourceDir\*" -Destination $publishModuleDir -Recurse -Exclude '.git', '.vscode', '.github'
 
-        # Double-check contents (optional)
-        Write-Host "Files prepared for publishing:"
-        Get-ChildItem -Path $publishDir -Recurse | ForEach-Object { Write-Host $_.FullName }
+        # Confirm copied contents
+        Write-Host "Contents of module folder:"
+        Get-ChildItem -Path $publishModuleDir -Recurse | ForEach-Object { Write-Host $_.FullName }
 
-        # Publish the module from the clean publish directory
+        # Publish from the parent directory (i.e., path that contains the module folder)
         Publish-Module -Path $publishDir -NuGetApiKey $env:PSGALLERY_API_KEY
