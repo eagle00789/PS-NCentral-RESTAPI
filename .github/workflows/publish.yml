@@ -52,4 +52,4 @@ jobs:
         Get-ChildItem -Path $publishModuleDir -Recurse | ForEach-Object { Write-Host $_.FullName }
 
         # Publish from the parent directory (i.e., path that contains the module folder)
-        Publish-Module -Path $publishDir -NuGetApiKey $env:PSGALLERY_API_KEY
+        Publish-Module -Path "$publishDir\PS-NCentral-RESTAPI" -NuGetApiKey $env:PSGALLERY_API_KEY
