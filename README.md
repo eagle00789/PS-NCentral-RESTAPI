@@ -61,7 +61,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [ ] POST /api/device
   - [x] GET /api/org-units/{orgUnitId}/devices > Get-NcentralDevices
   - [x] GET /api/devices > Get-NcentralDevices
-  - [ ] GET /api/devices/{deviceId}
+  - [x] GET /api/devices/{deviceId} > Get-NcentralDevice
   - [x] GET /api/devices/{deviceId}/service-monitor-status > Get-NcentralDeviceServiceMonitorStatus
   - [x] GET /api/devices/{deviceId}/assets > Get-NcentralDeviceAssets
   - [ ] GET /api/devices/{deviceId}/activation-key

@@ -1,6 +1,6 @@
 @{
     RootModule = 'PS-NCentral-RESTAPI.psm1'
-    ModuleVersion = '0.4.4'
+    ModuleVersion = '0.4.5'
     GUID = 'b3f4c223-5dd6-4de4-a6c1-5f6e7d71c505'
     Author = 'eagle00789'
     Description = 'PowerShell module for the N-central REST-API'
@@ -17,6 +17,7 @@
         'Get-NcentralAuthenticationRefresh',
         'Get-NcentralAuthenticationValidation',
         'Get-NcentralCustomProperties',
+        'Get-NcentralDevice',
         'Get-NcentralDeviceAssets',
         'Get-NcentralDeviceFilters',
         'Get-NcentralDevices',
