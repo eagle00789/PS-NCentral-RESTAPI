@@ -114,7 +114,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 
 Total Endpoints: 74
 
-Finished Endpoints (including the endpoints that won't be implemented): 36
+Finished Endpoints (including the endpoints that won't be implemented): 37
 
 ## Future enhancements
 
