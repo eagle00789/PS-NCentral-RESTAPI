@@ -13,7 +13,8 @@ The Powershell Gallery version can be found at [Powershell Gallery](https://www.
 
 ## PREVIEW API Endpoints
 
-All endpoints that are currently marked as preview in the API of N-Central, will always output a warning on the console stating that the endpoint is still a preview.
+> [!WARNING]
+> All endpoints that are currently marked as preview in the API of N-Central, will always output a warning on the console stating that the endpoint is still a preview.
 
 ## Remaining Categories
 
