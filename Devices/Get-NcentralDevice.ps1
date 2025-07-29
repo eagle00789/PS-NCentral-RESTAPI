@@ -7,7 +7,7 @@ Get a single N-Central Device
 This function gets a single N-Central device.
 
 .PARAMETER DeviceID
-Required. The Organisation Unit ID.
+Required. The Device ID.
 
 .EXAMPLE
 Get-NcentralDevice -DeviceID 5984758458
@@ -17,7 +17,7 @@ This example fetches the device that match with device ID 5984758458
 #>
     [cmdletbinding()]
     param(
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $true)]
         [int]$DeviceID
     )
 
