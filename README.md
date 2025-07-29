@@ -54,8 +54,8 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] GET /api/device-filters > Get-NcentralDeviceFilters
 - [x] Device Tasks (0/1)
   - [x] GET /api/devices/{deviceId}/scheduled-tasks > Get-NcentralDeviceTasks
-- [ ] Devices (8/11)
-  - [ ] GET /api/devices/{deviceId}/assets/lifecycle-info
+- [ ] Devices (4/11)
+  - [x] GET /api/devices/{deviceId}/assets/lifecycle-info > Get-NcentralDeviceAssetsLifecycleInfo
   - [ ] PUT /api/devices/{deviceId}/assets/lifecycle-info
   - [ ] PATCH /api/devices/{deviceId}/assets/lifecycle-info
   - [ ] POST /api/device
@@ -64,7 +64,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] GET /api/devices/{deviceId} > Get-NcentralDevice
   - [x] GET /api/devices/{deviceId}/service-monitor-status > Get-NcentralDeviceServiceMonitorStatus
   - [x] GET /api/devices/{deviceId}/assets > Get-NcentralDeviceAssets
-  - [ ] GET /api/devices/{deviceId}/activation-key
+  - [x] GET /api/devices/{deviceId}/activation-key > Get-NcentralDeviceActivationKey
   - [ ] GET /api/appliance-tasks/{taskId}
 - [ ] Job Statuses (1/1)
   - [ ] GET /api/org-units/{orgUnitId}/job-statuses
@@ -114,7 +114,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 
 Total Endpoints: 74
 
-Finished Endpoints (including the endpoints that won't be implemented): 37
+Finished Endpoints (including the endpoints that won't be implemented): 39
 
 ## Future enhancements
 
