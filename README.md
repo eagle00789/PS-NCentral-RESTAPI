@@ -74,7 +74,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [ ] DELETE /api/devices/maintenance-windows
   - [x] GET /api/devices/{deviceId}/maintenance-windows > Get-NcentralMaintenanceWindows
 - [ ] Organisation Units (13/14)
-  - [ ] GET /api/service-orgs
+  - [x] GET /api/service-orgs > Get-NcentralServiceOrganisations
   - [ ] POST /api/service-orgs
   - [ ] GET /api/service-orgs/{soId}/customers
   - [x] POST /api/service-orgs/{soId}/customers > New-NcentralCustomer
