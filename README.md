@@ -76,7 +76,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 - [ ] Organisation Units (13/14)
   - [x] GET /api/service-orgs > Get-NcentralServiceOrganisations
   - [ ] POST /api/service-orgs
-  - [ ] GET /api/service-orgs/{soId}/customers
+  - [x] GET /api/service-orgs/{soId}/customers > Get-NcentralServiceOrganisationsCustomers
   - [x] POST /api/service-orgs/{soId}/customers > New-NcentralCustomer
   - [ ] GET /api/customers/{customerId}/sites
   - [ ] POST /api/customers/{customerId}/sites
