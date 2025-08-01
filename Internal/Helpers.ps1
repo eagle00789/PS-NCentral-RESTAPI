@@ -20,7 +20,7 @@ function Invoke-NcentralApi {
 
         if ($Body -ne $null) {
             if ($ConvertToJson) {
-                $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers -Body ($Body | ConvertTo-Json -Depth 5) -ContentType "application/json"
+                $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers -Body ($Body | ConvertTo-Json -Depth 10) -ContentType "application/json"
             } else {
                 $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers -Body $Body -ContentType "text/plain"
             }
