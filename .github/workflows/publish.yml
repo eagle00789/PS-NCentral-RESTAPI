@@ -3,6 +3,9 @@ name: Publish PowerShell Module
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write  # 🔥 Needed for git push, tags, and releases
+
 jobs:
   publish:
     runs-on: windows-latest
