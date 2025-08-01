@@ -80,7 +80,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] POST /api/service-orgs/{soId}/customers > New-NcentralCustomer
   - [x] GET /api/customers/{customerId}/sites > Get-NcentralCustomerSites
   - [ ] POST /api/customers/{customerId}/sites
-  - [ ] GET /api/sites
+  - [x] GET /api/sites > Get-NcentralSites
   - [ ] GET /api/sites/{siteId}
   - [ ] GET /api/service-orgs/{soId}
   - [ ] GET /api/org-units
@@ -114,7 +114,7 @@ Behind each category is a number defining how many API endpoints are remaining o
 
 Total Endpoints: 74
 
-Finished Endpoints (including the endpoints that won't be implemented): 42
+Finished Endpoints (including the endpoints that won't be implemented): 43
 
 ## Future enhancements
 
