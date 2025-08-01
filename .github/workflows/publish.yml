@@ -61,7 +61,7 @@ jobs:
         # Save version to environment file for later steps
         "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-    - name: Debug: Show environment version
+    - name: Debug - Show environment version
       run: echo "Version is ${{ env.VERSION }}"
 
     - name: Create Git tag for release
