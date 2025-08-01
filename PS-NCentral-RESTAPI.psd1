@@ -33,6 +33,7 @@
         'Get-NcentralScheduledTaskStatusDetails',
         'Get-NcentralServiceOrganisations',
         'Get-NcentralServiceOrganisationsCustomers',
+        'Get-NcentralSite',
         'Get-NcentralSites',
         'Get-NcentralUserRoles',
         'Get-NcentralUsers',
