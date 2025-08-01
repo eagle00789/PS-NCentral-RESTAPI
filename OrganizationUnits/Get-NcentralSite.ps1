@@ -10,9 +10,9 @@ This function gets a single site based on SiteID
 Required.
 
 .EXAMPLE
-Get-NcentralSites -All
+Get-NcentralSites -SiteID 1085
 
-This example fetches all N-Central sites
+This example fetches a single site by id 1085
 
 #>
     [cmdletbinding()]
