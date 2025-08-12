@@ -70,7 +70,6 @@ This example fetches all N-Central devices that match with filter ID 38225172
             if ($PSBoundParameters.ContainsKey('FilterID')) {
                 $uri = "$uri&filterId=$FilterID"
             }
-            Write-Host $uri
             $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
             $Pages = $RawData.totalPages
             $Data = New-Object System.Collections.Generic.List[Object]
