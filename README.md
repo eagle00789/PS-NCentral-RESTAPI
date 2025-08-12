@@ -40,7 +40,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] POST /api/auth/authenticate > Connect-Ncentral
   - [x] ~~GET /api/auth > won't be implemented as it only returns a list of available endpoints~~
   - [x] GET /api/auth/validate > Get-NcentralAuthenticationValidation
-- Custom Properties (8/9)
+- [ ] Custom Properties (8/9)
   - [ ] PUT /api/org-units/{orgUnitId}/org-custom-property-defaults
   - [x] GET /api/org-units/{orgUnitId}/custom-properties/{propertyId}
   - [ ] PUT /api/org-units/{orgUnitId}/custom-properties/{propertyId}
