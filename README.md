@@ -42,7 +42,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] GET /api/auth/validate > Get-NcentralAuthenticationValidation
 - Custom Properties (8/9)
   - [ ] PUT /api/org-units/{orgUnitId}/org-custom-property-defaults
-  - [ ] GET /api/org-units/{orgUnitId}/custom-properties/{propertyId}
+  - [x] GET /api/org-units/{orgUnitId}/custom-properties/{propertyId}
   - [ ] PUT /api/org-units/{orgUnitId}/custom-properties/{propertyId}
   - [ ] GET /api/devices/{deviceId}/custom-properties/{propertyId}
   - [ ] PUT /api/devices/{deviceId}/custom-properties/{propertyId}
