@@ -88,7 +88,7 @@ jobs:
       uses: PowerShell/setup-powershell@v1
 
     - name: Show dry run mode
-      run: echo "🧪 Dry run: ${{ github.event.inputs.dry_run }}"
+      run: echo "🧪 Dry run: ${{ github.event.inputs.dry_run || 'true' }}"
 
     - name: Install PowerShellGet (if needed)
       shell: pwsh
@@ -136,14 +136,14 @@ jobs:
         Write-Host "✅ Module published."
 
     - name: Delete existing Git tag (if any)
-      if: ${{ github.event.inputs.dry_run == 'false' }}
+      if: ${{ (github.event.inputs.dry_run || 'true') == 'false' }}
       run: |
         git fetch --tags
         git tag -d "v${{ env.VERSION }}" 2>$null || echo "No local tag"
         git push origin :refs/tags/v${{ env.VERSION }} 2>$null || echo "No remote tag"
 
     - name: Create Git tag
-      if: ${{ github.event.inputs.dry_run == 'false' }}
+      if: ${{ (github.event.inputs.dry_run || 'true') == 'false' }}
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
@@ -151,7 +151,7 @@ jobs:
         git push origin "v${{ env.VERSION }}"
 
     - name: Create GitHub Release
-      if: ${{ github.event.inputs.dry_run == 'false' }}
+      if: ${{ (github.event.inputs.dry_run || 'true') == 'false' }}
       uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ env.VERSION }}
