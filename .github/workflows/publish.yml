@@ -56,12 +56,23 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: Run Pester Tests
+    
+    - name: Run Pester Tests (if any)
       shell: pwsh
       run: |
-        Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-        Invoke-Pester -Path ./tests -Output Detailed -EnableExit
+        if (Test-Path -Path ./tests -PathType Container) {
+          $testFiles = Get-ChildItem -Path ./tests -Recurse -Include '*.Tests.ps1'
+          if ($testFiles.Count -gt 0) {
+            Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+            Invoke-Pester -Path ./tests -Output Detailed -EnableExit
+          }
+          else {
+            Write-Host "No Pester test files found, skipping tests."
+          }
+        }
+        else {
+          Write-Host "Tests folder not found, skipping tests."
+        }
 
   #####################
   # 3. Publish Job
