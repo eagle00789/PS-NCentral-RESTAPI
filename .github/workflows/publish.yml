@@ -1,81 +1,161 @@
-name: Publish PowerShell Module
+name: Build, Test, and Publish PowerShell Module
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (skip publishing, tagging, and releasing)?'
+        required: false
+        default: 'true'
 
 permissions:
-  contents: write  # 🔥 Needed for git push, tags, and releases
+  contents: write  # Required for git tag and release
 
 jobs:
-  publish:
+
+  #####################
+  # 1. Build Job
+  #####################
+  build:
     runs-on: windows-latest
+    timeout-minutes: 10
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install Required Module
+    - name: Set up PowerShell
+      uses: PowerShell/setup-powershell@v1
+      with:
+        pwsh-version: '7.x'
+
+    - name: Locate module manifest and prepare
+      id: build_module
       shell: pwsh
       run: |
-        Install-Module -Name PowerShellGet -Force -Scope CurrentUser -AllowClobber
+        $manifest = Get-ChildItem -Recurse -Include *.psd1 | Where-Object { $_.Name -notlike '*Tests*' } | Select-Object -First 1
+        if (-not $manifest) {
+          Write-Error "❌ Module manifest not found!"
+          exit 1
+        }
 
-    - name: Publish to PowerShell Gallery
+        $moduleName = [IO.Path]::GetFileNameWithoutExtension($manifest.Name)
+        $version = (Import-PowerShellDataFile -Path $manifest.FullName).ModuleVersion.ToString()
+
+        "MODULE_NAME=$moduleName" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+        echo "moduleName=$moduleName" >> $GITHUB_OUTPUT
+        echo "version=$version" >> $GITHUB_OUTPUT
+
+        Write-Host "✅ Found module '$moduleName' version $version"
+
+  #####################
+  # 2. Test Job
+  #####################
+  test:
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up PowerShell
+      uses: PowerShell/setup-powershell@v1
+
+    - name: Run Pester Tests
+      shell: pwsh
+      run: |
+        Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+        Invoke-Pester -Path ./tests -Output Detailed -EnableExit
+
+  #####################
+  # 3. Publish Job
+  #####################
+  publish:
+    needs: test
+    runs-on: windows-latest
+    timeout-minutes: 10
+    if: success()
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up PowerShell
+      uses: PowerShell/setup-powershell@v1
+
+    - name: Show dry run mode
+      run: echo "🧪 Dry run: ${{ github.event.inputs.dry_run }}"
+
+    - name: Install PowerShellGet (if needed)
+      shell: pwsh
+      run: |
+        if (-not (Get-Module -ListAvailable -Name PowerShellGet)) {
+          Install-Module -Name PowerShellGet -Force -Scope CurrentUser -AllowClobber
+        }
+
+    - name: Prepare Module Files
+      id: prepare_publish
+      shell: pwsh
+      run: |
+        $manifest = Get-ChildItem -Recurse -Include *.psd1 | Where-Object { $_.Name -notlike '*Tests*' } | Select-Object -First 1
+        if (-not $manifest) {
+          Write-Error "❌ Module manifest not found!"
+          exit 1
+        }
+
+        $moduleName = [IO.Path]::GetFileNameWithoutExtension($manifest.Name)
+        $version = (Import-PowerShellDataFile -Path $manifest.FullName).ModuleVersion.ToString()
+        $publishDir = Join-Path -Path $env:RUNNER_TEMP -ChildPath "publish"
+        $publishModuleDir = Join-Path -Path $publishDir -ChildPath $moduleName
+
+        if (Test-Path $publishDir) { Remove-Item -Recurse -Force $publishDir }
+        New-Item -ItemType Directory -Path $publishModuleDir -Force | Out-Null
+
+        $includeExtensions = @('*.psd1', '*.psm1', '*.ps1')
+        foreach ($ext in $includeExtensions) {
+          Copy-Item -Path "$($manifest.Directory.FullName)\$ext" -Destination $publishModuleDir -Recurse -ErrorAction SilentlyContinue
+        }
+
+        "MODULE_NAME=$moduleName" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "PUBLISH_DIR=$publishModuleDir" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+        Write-Host "✅ Module prepared for publish: $publishModuleDir"
+
+    - name: Publish PowerShell Module
+      if: ${{ github.event.inputs.dry_run == 'false' }}
       shell: pwsh
       env:
         PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
       run: |
-        # Find the module manifest (.psd1)
-        $manifest = Get-ChildItem -Path . -Filter *.psd1 -Recurse | Select-Object -First 1
+        Publish-Module -Path "${{ env.PUBLISH_DIR }}" -NuGetApiKey $env:PSGALLERY_API_KEY
+        Write-Host "✅ Module published."
 
-        if (-not $manifest) {
-          Write-Error "Module manifest not found!"
-          exit 1
-        }
+    - name: Delete existing Git tag (if any)
+      if: ${{ github.event.inputs.dry_run == 'false' }}
+      run: |
+        git fetch --tags
+        git tag -d "v${{ env.VERSION }}" 2>$null || echo "No local tag"
+        git push origin :refs/tags/v${{ env.VERSION }} 2>$null || echo "No remote tag"
 
-        # Get module name from manifest filename (assumes <ModuleName>.psd1)
-        $moduleName = [IO.Path]::GetFileNameWithoutExtension($manifest.Name)
-        $moduleSourceDir = $manifest.Directory.FullName
-        $version = (Import-PowerShellDataFile -Path $manifest.FullName).ModuleVersion.ToString()
-
-        Write-Host "Preparing module '$moduleName' from: $moduleSourceDir"
-
-        # Create publish directory structure: .../publish/ModuleName/
-        $publishDir = Join-Path -Path $env:RUNNER_TEMP -ChildPath "publish"
-        $publishModuleDir = Join-Path -Path $publishDir -ChildPath $moduleName
-
-        if (Test-Path $publishDir) {
-          Remove-Item -Recurse -Force $publishDir
-        }
-        New-Item -ItemType Directory -Path $publishModuleDir -Force | Out-Null
-
-        # Copy only necessary module files (.psd1, .psm1, etc.)
-        Copy-Item -Path "$moduleSourceDir\*" -Destination $publishModuleDir -Recurse -Exclude '.git', '.vscode', '.github'
-
-        # Confirm copied contents
-        Write-Host "Contents of module folder:"
-        Get-ChildItem -Path $publishModuleDir -Recurse | ForEach-Object { Write-Host $_.FullName }
-
-        # Publish from the parent directory (i.e., path that contains the module folder)
-        Publish-Module -Path "$publishDir\PS-NCentral-RESTAPI" -NuGetApiKey $env:PSGALLERY_API_KEY
-
-        # Save version to environment file for later steps
-        "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-    - name: Debug - Show environment version
-      run: echo "Version is ${{ env.VERSION }}"
-
-    - name: Create Git tag for release
+    - name: Create Git tag
+      if: ${{ github.event.inputs.dry_run == 'false' }}
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
         git tag "v${{ env.VERSION }}"
         git push origin "v${{ env.VERSION }}"
 
-    - name: Upload GitHub Release
+    - name: Create GitHub Release
+      if: ${{ github.event.inputs.dry_run == 'false' }}
       uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ env.VERSION }}
-        name: PS-Ncentral-RESTAPI v${{ env.VERSION }}
+        name: PS-NCentral-RESTAPI v${{ env.VERSION }}
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
