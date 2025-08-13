@@ -24,11 +24,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up PowerShell
-      uses: actions/setup-powershell@v2
-      with:
-        pwsh-version: '7.x'
-
     - name: Locate module manifest and prepare
       id: build_module
       shell: pwsh
@@ -62,9 +57,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up PowerShell
-      uses: PowerShell/setup-powershell@v1
-
     - name: Run Pester Tests
       shell: pwsh
       run: |
@@ -83,9 +75,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: Set up PowerShell
-      uses: PowerShell/setup-powershell@v1
 
     - name: Show dry run mode
       run: |
@@ -129,7 +118,7 @@ jobs:
         Write-Host "✅ Module prepared for publish: $publishModuleDir"
 
     - name: Publish PowerShell Module
-      if: ${{ github.event.inputs.dry_run == 'false' }}
+      if: ${{ (github.event.inputs.dry_run || 'true') == 'false' }}
       shell: pwsh
       env:
         PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
