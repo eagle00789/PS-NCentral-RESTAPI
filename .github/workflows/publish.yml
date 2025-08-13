@@ -88,7 +88,9 @@ jobs:
       uses: PowerShell/setup-powershell@v1
 
     - name: Show dry run mode
-      run: echo "🧪 Dry run: ${{ github.event.inputs.dry_run || 'true' }}"
+      run: |
+        echo "🧪 Dry run mode:"
+        echo "${{ github.event.inputs.dry_run || 'true' }}"
 
     - name: Install PowerShellGet (if needed)
       shell: pwsh
