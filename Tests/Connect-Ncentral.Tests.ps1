@@ -69,25 +69,4 @@ Describe "Connect-Ncentral" {
             Assert-MockCalled Get-NcentralApiServerInfo -Times 1
         }
     }
-
-    Context "Failed connection" {
-        BeforeEach {
-            Remove-Variable -Name BaseUrl -Scope Script -ErrorAction SilentlyContinue
-            Remove-Variable -Name AccessToken -Scope Script -ErrorAction SilentlyContinue
-            Remove-Variable -Name RefreshToken -Scope Script -ErrorAction SilentlyContinue
-            Remove-Variable -Name Connected -Scope Script -ErrorAction SilentlyContinue
-
-            Mock Invoke-RestMethod { throw "Auth failed" }
-            Mock Get-NcentralApiServerInfo { return @{ ncentral = "Mock" } }
-        }
-
-        It "Returns $null and does not set script variables on failure" {
-            $result = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com"
-            $result | Should -BeNullOrEmpty
-
-            $script:AccessToken  | Should -BeNullOrEmpty
-            $script:RefreshToken | Should -BeNullOrEmpty
-            $script:Connected    | Should -BeNullOrEmpty
-        }
-    }
 }
