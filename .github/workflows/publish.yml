@@ -48,6 +48,15 @@ jobs:
   #####################
   # 2. Test Job
   #####################
+  test:
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
     - name: Run Pester Tests (if any)
       shell: pwsh
       run: |
