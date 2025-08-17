@@ -48,23 +48,23 @@ jobs:
   #####################
   # 2. Test Job
   #####################
-  test:
-    needs: build
-    runs-on: windows-latest
-    timeout-minutes: 5
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    
     - name: Run Pester Tests (if any)
       shell: pwsh
       run: |
         if (Test-Path -Path ./Tests -PathType Container) {
           $testFiles = Get-ChildItem -Path ./Tests -Recurse -Include '*.Tests.ps1'
           if ($testFiles.Count -gt 0) {
+            # Install latest Pester v5
             Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-            Invoke-Pester -Path ./Tests -Output Detailed -EnableExit
+            
+            # Run tests with Pester v5
+            $result = Invoke-Pester -Path ./Tests -Output Detailed -PassThru
+            $result | Out-Default  # ensures results show in logs
+            
+            if ($result.FailedCount -gt 0) {
+              Write-Error "One or more Pester tests failed."
+              exit 1
+            }
           }
           else {
             Write-Host "No Pester test files found, skipping tests."
