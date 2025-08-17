@@ -64,7 +64,7 @@ jobs:
           $testFiles = Get-ChildItem -Path ./Tests -Recurse -Include '*.Tests.ps1'
           if ($testFiles.Count -gt 0) {
             Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-            Invoke-Pester -Path ./tests -Output Detailed -EnableExit
+            Invoke-Pester -Path ./Tests -Output Detailed -EnableExit
           }
           else {
             Write-Host "No Pester test files found, skipping tests."
