@@ -21,53 +21,73 @@ Describe "Connect-Ncentral" {
 
     Context "Successful connection" {
         BeforeEach {
+            # Reset script variables
             Remove-Variable -Name BaseUrl -Scope Script -ErrorAction SilentlyContinue
-            Remove-Variable -Name JwtToken -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name AccessToken -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name RefreshToken -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name Connected -Scope Script -ErrorAction SilentlyContinue
 
-            # Return a value consistent with what the script expects
-            Mock Invoke-RestMethod { return @{ success = $true } }
+            # Mock the REST call to return expected token structure
+            Mock Invoke-RestMethod {
+                return @{
+                    tokens = @{
+                        access  = @{ token = "access123" }
+                        refresh = @{ token = "refresh123" }
+                    }
+                }
+            }
+
+            # Mock server info call
+            Mock Get-NcentralApiServerInfo { return @{ ncentral = "2025.1" } }
         }
 
-        It "Returns $true and sets script variables" {
-            $result = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com"
-            $result | Should -BeTrue
-            $script:BaseUrl  | Should -Be "https://ncentral.example.com"
-            $script:JwtToken | Should -Be "abc123"
+        It "Sets script variables correctly" {
+            $null = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com"
+
+            $script:BaseUrl      | Should -Be "https://ncentral.example.com"
+            $script:AccessToken  | Should -Be "access123"
+            $script:RefreshToken | Should -Be "refresh123"
+            $script:Connected    | Should -BeTrue
         }
 
-        It "Normalizes BaseUrl to include https and no trailing slash" {
-            Connect-Ncentral -JwtToken "abc123" -BaseUrl "http://ncentral.example.com/" | Out-Null
+        It "Normalizes BaseUrl to https and removes trailing slash" {
+            $null = Connect-Ncentral -JwtToken "abc123" -BaseUrl "http://ncentral.example.com/"
             $script:BaseUrl | Should -Be "https://ncentral.example.com"
         }
 
         It "Calls Invoke-RestMethod with correct parameters" {
-            Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com" | Out-Null
+            $null = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com"
             Assert-MockCalled Invoke-RestMethod -ParameterFilter {
                 $Uri   -eq "https://ncentral.example.com/api/auth/authenticate" -and
                 $Method -eq "Post" -and
                 $Headers["Authorization"] -eq "Bearer abc123"
             } -Times 1
         }
+
+        It "Calls Get-NcentralApiServerInfo once" {
+            $null = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com"
+            Assert-MockCalled Get-NcentralApiServerInfo -Times 1
+        }
     }
 
     Context "Failed connection" {
         BeforeEach {
-            # Reset script variables before each test
             Remove-Variable -Name BaseUrl -Scope Script -ErrorAction SilentlyContinue
-            Remove-Variable -Name JwtToken -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name AccessToken -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name RefreshToken -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name Connected -Scope Script -ErrorAction SilentlyContinue
 
             Mock Invoke-RestMethod { throw "Auth failed" }
+            Mock Get-NcentralApiServerInfo { return @{ ncentral = "Mock" } }
         }
 
-        It "Returns $false when Invoke-RestMethod fails" {
+        It "Returns $null and does not set script variables on failure" {
             $result = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com"
-            $result | Should -BeFalse
-        }
+            $result | Should -BeNullOrEmpty
 
-        It "Does not set script variables when connection fails" {
-            Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com" | Out-Null
-            $script:BaseUrl  | Should -BeNullOrEmpty
-            $script:JwtToken | Should -BeNullOrEmpty
+            $script:AccessToken  | Should -BeNullOrEmpty
+            $script:RefreshToken | Should -BeNullOrEmpty
+            $script:Connected    | Should -BeNullOrEmpty
         }
     }
 }
