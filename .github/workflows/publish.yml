@@ -67,16 +67,16 @@ jobs:
             Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
             Import-Module Pester
 
-            # Get all .ps1 files excluding Tests folder
+            # Collect code files excluding Tests
             $codeFiles = Get-ChildItem -Path ./ -Recurse -Include '*.ps1' | Where-Object { $_.FullName -notmatch '\\Tests\\' }
 
-            # Configure Pester code coverage
+            # Create configuration object
             $config = New-PesterConfiguration
             $config.CodeCoverage.Enabled = $true
             $config.CodeCoverage.Path = $codeFiles
 
-            # Run tests
-            $result = Invoke-Pester -Path ./Tests -Configuration $config -Output Detailed -PassThru
+            # Run all tests under ./Tests using the configuration
+            $result = Invoke-Pester -Script ./Tests -Configuration $config -PassThru -Output Detailed
             $result | Out-Default
 
             # Show coverage percentage
