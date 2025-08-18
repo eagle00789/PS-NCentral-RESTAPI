@@ -69,7 +69,11 @@ Describe "Invoke-NcentralApi" {
 
         It "returns null and warns when API rate limit exceeded" {
             Mock Invoke-RestMethod {
+                $resp = New-Object PSObject -Property @{
+                    StatusCode = New-Object PSObject -Property @{ value__ = 429 }
+                }
                 $ex = New-Object Exception "Rate limit"
+                Add-Member -InputObject $ex -MemberType NoteProperty -Name Response -Value $resp
                 throw $ex
             }
 
@@ -77,30 +81,37 @@ Describe "Invoke-NcentralApi" {
             $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method GET -WarningVariable warning
 
             $result | Should -BeNullOrEmpty
-            $warning | Should -Match "Rate limit"
+            $warning | Should -Match "Rate limit exceeded"
         }
 
-        It "Returns null and writes error for other HTTP codes" {
-            Mock Invoke-RestMethod {
-                $ex = New-Object Exception "Server error"
-                $status = New-Object PSObject -Property @{ value__ = [int][System.Net.HttpStatusCode]::InternalServerError }
-                $resp = New-Object PSObject -Property @{ StatusCode = $status }
-                $ex | Add-Member -MemberType NoteProperty -Name Response -Value $resp
-                throw $ex
+        It "returns null and writes error when server error (500)" {
+            Mock -CommandName Invoke-RestMethod {
+                throw [System.Net.WebException]::new(
+                    "Server error",
+                    [System.Net.WebExceptionStatus]::ProtocolError
+                )
             }
 
-            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET"
+            $errors = $null
+            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method Get -ErrorAction SilentlyContinue -ErrorVariable +errors
+
             $result | Should -BeNullOrEmpty
+            $errors | Should -Not -BeNullOrEmpty
+            $errors[0].ToString() | Should -Match "Server error"
         }
     }
 }
 
 Describe "Show-Warning" {
     BeforeAll {
-        . "$PSScriptRoot\..\Helpers.ps1"
+        . "$PSScriptRoot\..\Internal\Helpers.ps1"
     }
 
     It "Writes a fixed warning message" {
-        { Show-Warning } | Should -ThrowExactly ([System.Management.Automation.WarningRecord]) -Because "Write-Warning outputs warnings"
+        $result = & {
+            $WarningPreference = "Continue"
+            Show-Warning 3>&1  # redirect warning stream to success stream
+        }
+        $result | Should -Be "This feature is still in preview and is subject to change in future versions."
     }
 }
