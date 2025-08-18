@@ -67,33 +67,36 @@ jobs:
             Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
             Import-Module Pester
 
-            # Collect code files excluding Tests
+            # Collect code files excluding Tests folder
             $codeFiles = Get-ChildItem -Path ./ -Recurse -Include '*.ps1' | Where-Object { $_.FullName -notmatch '\\Tests\\' }
 
-            # Create configuration object
+            # Create Pester configuration
             $config = New-PesterConfiguration
             $config.CodeCoverage.Enabled = $true
             $config.CodeCoverage.Path = $codeFiles
 
-            # Run all tests under ./Tests using the configuration
-            $result = Invoke-Pester -Script ./Tests -Configuration $config -PassThru -Output Detailed
+            # Set the test folder(s) inside the configuration
+            $config.Tests.Path = "./Tests"
+
+            # Run Pester using only the configuration
+            $result = Invoke-Pester -Configuration $config -Output Detailed -PassThru
             $result | Out-Default
 
-            # Show coverage percentage
+            # Show coverage
             $coverage = [math]::Round($result.CodeCoverage.Percentage, 2)
             Write-Host "Code coverage: $coverage %"
 
             # Optional: fail workflow if coverage < threshold
             $threshold = 80
             if ($coverage -lt $threshold) {
-              Write-Error "Code coverage below threshold ($threshold%)."
-              exit 1
+                Write-Error "Code coverage below threshold ($threshold%)."
+                exit 1
             }
 
             # Fail workflow if any tests failed
             if ($result.FailedCount -gt 0) {
-              Write-Error "One or more Pester tests failed."
-              exit 1
+                Write-Error "One or more Pester tests failed."
+                exit 1
             }
           }
           else {
