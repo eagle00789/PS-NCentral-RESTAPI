@@ -57,7 +57,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
     
-    - name: Run Pester Tests (if any)
+    - name: Run Pester Tests with Coverage (if any)
       shell: pwsh
       run: |
         if (Test-Path -Path ./Tests -PathType Container) {
@@ -65,11 +65,32 @@ jobs:
           if ($testFiles.Count -gt 0) {
             # Install latest Pester v5
             Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
-            
-            # Run tests with Pester v5
-            $result = Invoke-Pester -Path ./Tests -Output Detailed -PassThru
-            $result | Out-Default  # ensures results show in logs
-            
+            Import-Module Pester
+
+            # Get all .ps1 files excluding Tests folder
+            $codeFiles = Get-ChildItem -Path ./ -Recurse -Include '*.ps1' | Where-Object { $_.FullName -notmatch '\\Tests\\' }
+
+            # Configure Pester code coverage
+            $config = New-PesterConfiguration
+            $config.CodeCoverage.Enabled = $true
+            $config.CodeCoverage.Path = $codeFiles
+
+            # Run tests
+            $result = Invoke-Pester -Path ./Tests -Configuration $config -Output Detailed -PassThru
+            $result | Out-Default
+
+            # Show coverage percentage
+            $coverage = [math]::Round($result.CodeCoverage.Percentage, 2)
+            Write-Host "Code coverage: $coverage %"
+
+            # Optional: fail workflow if coverage < threshold
+            $threshold = 80
+            if ($coverage -lt $threshold) {
+              Write-Error "Code coverage below threshold ($threshold%)."
+              exit 1
+            }
+
+            # Fail workflow if any tests failed
             if ($result.FailedCount -gt 0) {
               Write-Error "One or more Pester tests failed."
               exit 1
