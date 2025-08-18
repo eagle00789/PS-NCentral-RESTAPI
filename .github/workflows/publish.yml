@@ -70,19 +70,16 @@ jobs:
             # Collect code files excluding Tests folder
             $codeFiles = Get-ChildItem -Path ./ -Recurse -Include '*.ps1' | Where-Object { $_.FullName -notmatch '\\Tests\\' }
 
-            # Create Pester configuration
+            # Create Pester configuration for coverage only
             $config = New-PesterConfiguration
             $config.CodeCoverage.Enabled = $true
             $config.CodeCoverage.Path = $codeFiles
 
-            # Set the test folder(s) inside the configuration
-            $config.Tests.Path = "./Tests"
-
-            # Run Pester using only the configuration
-            $result = Invoke-Pester -Configuration $config -Output Detailed -PassThru
+            # Run tests in ./Tests folder with coverage
+            $result = Invoke-Pester -Path './Tests' -Configuration $config -PassThru -Output Detailed
             $result | Out-Default
 
-            # Show coverage
+            # Show coverage percentage
             $coverage = [math]::Round($result.CodeCoverage.Percentage, 2)
             Write-Host "Code coverage: $coverage %"
 
