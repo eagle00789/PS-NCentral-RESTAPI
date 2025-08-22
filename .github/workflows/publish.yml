@@ -84,9 +84,14 @@ jobs:
             # Write test + coverage results to console
             $result | Out-Default
 
-            # Show coverage percentage
-            $coverage = [math]::Round($result.CodeCoverage.Percentage, 2)
-            Write-Host "Code coverage Raw Data: $($result.CodeCoverage)"
+            # Parse the numeric percentage from the CodeCoverage string (e.g. "10.41% / 75%")
+            if ($null -ne $result.CodeCoverage) {
+                $coverageStr = $result.CodeCoverage.ToString().Split('/')[0].Trim()  # "10.41%"
+                $coverage = [double]($coverageStr.TrimEnd('%'))                      # 10.41 as [double]
+            }
+            else {
+                $coverage = 0.0
+            }
             Write-Host "Code coverage: $coverage %"
 
             # Optional: fail workflow if coverage < threshold
