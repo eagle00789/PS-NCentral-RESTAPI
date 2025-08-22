@@ -86,7 +86,7 @@ jobs:
 
             # Show coverage percentage
             $coverage = [math]::Round($result.CodeCoverage.Percentage, 2)
-            Write-Host "Code coverage Raw Data: $($result.CodeCoverage.Percentage)"
+            Write-Host "Code coverage Raw Data: $($result.CodeCoverage)"
             Write-Host "Code coverage: $coverage %"
 
             # Optional: fail workflow if coverage < threshold
