@@ -99,6 +99,63 @@ Describe "Invoke-NcentralApi" {
             $errors | Should -Not -BeNullOrEmpty
             $errors[0].ToString() | Should -Match "Server error"
         }
+
+        It "Does not pass -Body when none is provided" {
+            Mock Invoke-RestMethod { return "ok" }
+
+            $null = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET"
+
+            Assert-MockCalled Invoke-RestMethod -Times 1 -ParameterFilter {
+                -not ($PSBoundParameters.ContainsKey("Body"))
+            }
+        }
+
+        It "Appends raw query parameters even with special characters" {
+            Mock Invoke-RestMethod { return "ok" }
+
+            $null = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" -Query @{ name = "bob smith"; filter = "x&y" }
+
+            Assert-MockCalled Invoke-RestMethod -Times 1 -ParameterFilter {
+                $Uri -match "name=bob smith" -and $Uri -match "filter=x&y"
+            }
+        }
+
+        It "Converts body object to JSON string" {
+            Mock Invoke-RestMethod { return "ok" }
+
+            $body = @{ key = "value" }
+            $null = Invoke-NcentralApi -Uri "https://server/api/test" -Method "POST" -Body $body
+
+            Assert-MockCalled Invoke-RestMethod -Times 1 -ParameterFilter {
+                $Body -match '"key":\s*"value"'
+            }
+        }
+
+        It "Handles exceptions without HTTP status code" {
+            Mock Invoke-RestMethod { throw (New-Object Exception "Some other error") }
+
+            $errors = $null
+            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method GET -ErrorAction SilentlyContinue -ErrorVariable +errors
+
+            $result | Should -BeNullOrEmpty
+            $errors[0].ToString() | Should -Match "Some other error"
+        }
+
+        It "Emits correct warning message on 401 Unauthorized" {
+            Mock Invoke-RestMethod {
+                $ex = New-Object Exception "Unauthorized"
+                $status = New-Object PSObject -Property @{ value__ = [int][System.Net.HttpStatusCode]::Unauthorized }
+                $resp = New-Object PSObject -Property @{ StatusCode = $status }
+                $ex | Add-Member -MemberType NoteProperty -Name Response -Value $resp
+                throw $ex
+            }
+
+            $warning = $null
+            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" -WarningVariable warning
+
+            $result | Should -BeNullOrEmpty
+            $warning | Should -Match "Authentication failed or expired"
+        }
     }
 }
 
