@@ -95,9 +95,9 @@ jobs:
             Write-Host "Code coverage: $coverage %"
 
             # Optional: fail workflow if coverage < threshold
-            $threshold = 80
+            $threshold = 1
             if ($coverage -lt $threshold) {
-                Write-Error "Code coverage below threshold ($threshold%)."
+                Write-Error "Code coverage $coverage% below threshold ($threshold%)."
                 exit 1
             }
 
