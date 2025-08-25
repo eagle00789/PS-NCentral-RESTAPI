@@ -1,7 +1,7 @@
 Describe "Get-NcentralAccessGroup" {
     BeforeAll {
-        . "$PSScriptRoot\..\Internal\Helpers.ps1"
-        . "$PSScriptRoot\..\AccessGroups\Get-NcentralAccessGroup.ps1"
+        . "$PSScriptRoot\..\..\Internal\Helpers.ps1"
+        . "$PSScriptRoot\..\..\AccessGroups\Get-NcentralAccessGroup.ps1"
     }
 
     BeforeEach {

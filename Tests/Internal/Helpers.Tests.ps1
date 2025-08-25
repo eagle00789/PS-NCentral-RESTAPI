@@ -1,6 +1,6 @@
 Describe "Invoke-NcentralApi" {
     BeforeAll {
-        . "$PSScriptRoot\..\Internal\Helpers.ps1"
+        . "$PSScriptRoot\..\..\Internal\Helpers.ps1"
     }
 
     BeforeEach {
@@ -161,7 +161,7 @@ Describe "Invoke-NcentralApi" {
 
 Describe "Show-Warning" {
     BeforeAll {
-        . "$PSScriptRoot\..\Internal\Helpers.ps1"
+        . "$PSScriptRoot\..\..\Internal\Helpers.ps1"
     }
 
     It "Writes a fixed warning message" {

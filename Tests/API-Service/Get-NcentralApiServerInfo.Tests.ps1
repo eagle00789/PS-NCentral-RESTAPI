@@ -1,7 +1,7 @@
 Describe "Get-NcentralApiServerInfo" {
     BeforeAll {
-        . "$PSScriptRoot\..\Internal\Helpers.ps1"
-        . "$PSScriptRoot\..\API-Service\Get-NcentralApiServerInfo.ps1"
+        . "$PSScriptRoot\..\..\Internal\Helpers.ps1"
+        . "$PSScriptRoot\..\..\API-Service\Get-NcentralApiServerInfo.ps1"
     }
 
     Context "Environment validation" {

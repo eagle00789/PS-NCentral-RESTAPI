@@ -1,7 +1,7 @@
 Describe "New-NcentralCustomer" {
     BeforeAll {
-        . "$PSScriptRoot\..\Internal\Helpers.ps1"
-        . "$PSScriptRoot\..\OrganizationUnits\New-NCentralCustomer.ps1"
+        . "$PSScriptRoot\..\..\Internal\Helpers.ps1"
+        . "$PSScriptRoot\..\..\OrganizationUnits\New-NCentralCustomer.ps1"
     }
 
     BeforeEach {

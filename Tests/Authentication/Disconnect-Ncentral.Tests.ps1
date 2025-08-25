@@ -1,6 +1,6 @@
 Describe "Disconnect-Ncentral" {
     BeforeAll {
-        . "$PSScriptRoot\..\Authentication\Disconnect-Ncentral.ps1"
+        . "$PSScriptRoot\..\..\Authentication\Disconnect-Ncentral.ps1"
     }
 
     Context "When called" {

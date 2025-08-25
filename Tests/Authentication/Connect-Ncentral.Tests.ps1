@@ -1,8 +1,8 @@
 Describe "Connect-Ncentral" {
     BeforeAll {
-        . "$PSScriptRoot\..\Internal\Helpers.ps1"
-        . "$PSScriptRoot\..\Authentication\Connect-Ncentral.ps1"
-        . "$PSScriptRoot\..\API-Service\Get-NcentralApiServerInfo.ps1"
+        . "$PSScriptRoot\..\..\Internal\Helpers.ps1"
+        . "$PSScriptRoot\..\..\Authentication\Connect-Ncentral.ps1"
+        . "$PSScriptRoot\..\..\API-Service\Get-NcentralApiServerInfo.ps1"
     }
 
     Context "Parameter validation" {
@@ -67,6 +67,32 @@ Describe "Connect-Ncentral" {
         It "Calls Get-NcentralApiServerInfo once" {
             $null = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com"
             Assert-MockCalled Get-NcentralApiServerInfo -Times 1
+        }
+    }
+
+    Context "Failure handling" {
+        BeforeEach {
+            # Reset script variables so a failed call doesn’t leave state behind
+            Remove-Variable -Name BaseUrl -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name AccessToken -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name RefreshToken -Scope Script -ErrorAction SilentlyContinue
+            Remove-Variable -Name Connected -Scope Script -ErrorAction SilentlyContinue
+
+            # Mock Invoke-RestMethod to simulate failure
+            Mock Invoke-RestMethod { throw "Authentication failed" }
+
+            # Mock server info just in case, but it should never be called here
+            Mock Get-NcentralApiServerInfo { return @{ ncentral = "2025.1" } }
+        }
+
+        It "Writes an error when authentication fails" {
+            $errors = $null
+
+            $result = Connect-Ncentral -JwtToken "badtoken" -BaseUrl "ncentral.example.com" -ErrorVariable +errors -ErrorAction SilentlyContinue
+
+            $result | Should -BeNullOrEmpty
+            $errors | Should -Not -BeNullOrEmpty
+            $errors[0].ToString() | Should -Match "Authentication failed"
         }
     }
 }
