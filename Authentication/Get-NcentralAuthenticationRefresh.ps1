@@ -18,8 +18,8 @@ This is the only way to refresh the API-Access Token
     $uri = "$script:BaseUrl/api/auth/refresh"
     $body = $script:RefreshToken
 
-    $tokens = Invoke-NcentralApi -Uri $uri -Method "POST" -Body $body -ConvertToJson $False
-    $script:AccessToken = $response.tokens.access.token
-    $script:RefreshToken = $response.tokens.refresh.token
-    Write-Information "The Access and Refresh tokens have been succesfully refreshed"
+    $tokens = Invoke-NcentralApi -Uri $uri -Method "POST" -Body $body -ConvertToJson $false
+    $script:AccessToken = $tokens.tokens.access.token
+    $script:RefreshToken = $tokens.tokens.refresh.token
+    Write-Information "The Access and Refresh tokens have been successfully refreshed"
 }
