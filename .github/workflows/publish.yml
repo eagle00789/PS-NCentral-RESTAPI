@@ -158,10 +158,21 @@ jobs:
         if (Test-Path $publishDir) { Remove-Item -Recurse -Force $publishDir }
         New-Item -ItemType Directory -Path $publishModuleDir -Force | Out-Null
 
-        $includeExtensions = @('*.psd1', '*.psm1', '*.ps1')
-        foreach ($ext in $includeExtensions) {
-          Copy-Item -Path "$($manifest.Directory.FullName)\$ext" -Destination $publishModuleDir -Recurse -ErrorAction SilentlyContinue
-        }
+        # Copy all module files and subfolders
+        $excludeFolders = @('.git', '.github', '.vscode', 'Tests')
+        Get-ChildItem -Path $manifest.Directory.FullName -Recurse |
+            Where-Object { 
+                foreach ($ex in $excludeFolders) { if ($_.FullName -like "*\$ex*") { return $false } }
+                return $true
+            } |
+            ForEach-Object {
+                $targetPath = $_.FullName.Replace($manifest.Directory.FullName, $publishModuleDir)
+                if ($_.PSIsContainer) {
+                    New-Item -ItemType Directory -Path $targetPath -Force | Out-Null
+                } else {
+                    Copy-Item -Path $_.FullName -Destination $targetPath -Force
+                }
+            }
 
         "MODULE_NAME=$moduleName" | Out-File -FilePath $env:GITHUB_ENV -Append
         "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
