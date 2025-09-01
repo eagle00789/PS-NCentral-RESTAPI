@@ -18,7 +18,7 @@ This example fetches the device that match with device ID 5984758458
     [cmdletbinding()]
     param(
         [Parameter(Mandatory = $true)]
-        [int]$DeviceID
+        [long]$DeviceID
     )
 
     $uri = "$script:BaseUrl/api/devices/$DeviceID"
