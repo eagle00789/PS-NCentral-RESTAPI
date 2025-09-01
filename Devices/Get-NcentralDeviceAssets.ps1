@@ -18,7 +18,7 @@ This example fetches the complete asset information for a device with ID 5268981
     [cmdletbinding()]
     param(
         [Parameter(Mandatory = $True)]
-        [int]$DeviceID
+        [long]$DeviceID
     )
 
     $uri = "$script:BaseUrl/api/devices/$DeviceID/assets"
