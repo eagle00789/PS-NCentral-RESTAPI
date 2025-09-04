@@ -18,7 +18,7 @@ This example fetches the device asset lifecycle information that matches with de
     [cmdletbinding()]
     param(
         [Parameter(Mandatory = $true)]
-        [int]$DeviceID
+        [long]$DeviceID
     )
 
     $uri = "$script:BaseUrl/api/devices/$DeviceID/assets/lifecycle-info"
