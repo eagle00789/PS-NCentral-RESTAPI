@@ -70,16 +70,21 @@ This example fetches all N-Central sites
             $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
             $Pages = $RawData.totalPages
             $Data = New-Object System.Collections.Generic.List[Object]
-            $Data.AddRange($RawData.data)
+            if ($RawData.data) {
+                $Data.AddRange($RawData.data)
+            }
             For ($PageNumber = 2; $PageNumber -le $Pages; $PageNumber++) {
-                $uri = "$script:BaseUrl/api/customers/$CustomerID/sites?pageNumber=$PageNumber&pageSize=$PageSiz"
+                $uri = "$script:BaseUrl/api/customers/$CustomerID/sites?pageNumber=$PageNumber&pageSize=$PageSize"
                 if ($PSBoundParameters.ContainsKey('SortOrder')) {
                     $uri = "$uri&sortOrder=$SortOrder"
                 }
                 if ($PSBoundParameters.ContainsKey('SortBy')) {
                     $uri = "$uri&sortBy=$SortBy"
                 }
-                $Data.AddRange((Invoke-NcentralApi -Uri $uri -Method "GET").data)
+                $pageData = (Invoke-NcentralApi -Uri $uri -Method "GET").data
+                if ($pageData) {
+                    $Data.AddRange($pageData)
+                }
             }
             return $Data
         }
