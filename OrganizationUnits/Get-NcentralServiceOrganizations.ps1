@@ -1,27 +1,27 @@
-function Get-NcentralServiceOrganisations {
+function Get-NcentralServiceOrganizations {
 <#
 .SYNOPSIS
-Get a list of all N-Central Service Organisations
+Get a list of all N-Central Service Organizations
 
 .DESCRIPTION
-This function gets a list of all N-Central Service Organisations
+This function gets a list of all N-Central Service Organizations
 
 .PARAMETER PageNumber
 Optional. Specifies which page of results to retrieve. Used when the total number of users exceeds the page size. Defaults to 1 if not specified
 
 .PARAMETER PageSize
-Optional. Specifies the number of Service Organisations to retrieve per page. Defaults to 50 if not specified.
+Optional. Specifies the number of Service Organizations to retrieve per page. Defaults to 50 if not specified.
 
 .PARAMETER All
-Optional. If specified, retrieves all Service Organisations across all pages
+Optional. If specified, retrieves all Service Organizations across all pages
 
 .PARAMETER SortOrder
 Optional. Specifies the sort order of the results. Valid case-insensitive input is asc, ascending, desc, descending, natural, reverse
 
 .EXAMPLE
-Get-NcentralServiceOrganisations
+Get-NcentralServiceOrganizations
 
-This example fetches all N-Central Service Organisations
+This example fetches all N-Central Service Organizations
 
 #>
     [cmdletbinding(DefaultParameterSetName = 'Paged')]

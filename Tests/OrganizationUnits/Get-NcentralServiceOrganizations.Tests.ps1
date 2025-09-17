@@ -1,8 +1,8 @@
-Describe "Get-NcentralServiceOrganisations" {
+Describe "Get-NcentralServiceOrganizations" {
 
     BeforeAll {
         . "$PSScriptRoot\..\..\Internal\Helpers.ps1"
-        . "$PSScriptRoot\..\..\OrganizationUnits\Get-NcentralServiceOrganisations.ps1"
+        . "$PSScriptRoot\..\..\OrganizationUnits\Get-NcentralServiceOrganizations.ps1"
         # Common values for mocks
         $BaseUrl = "https://example.com"
         $script:BaseUrl = $BaseUrl
@@ -17,7 +17,7 @@ Describe "Get-NcentralServiceOrganisations" {
                 return @{ data = @(@{ id = 1 }); totalPages = 1 }
             }
 
-            $result = Get-NcentralServiceOrganisations
+            $result = Get-NcentralServiceOrganizations
 
             $script:calledUri | Should -Be "$BaseUrl/api/service-orgs?pageNumber=1&pageSize=50"
             $result.id | Should -Be 1
@@ -31,7 +31,7 @@ Describe "Get-NcentralServiceOrganisations" {
                 return @{ data = @(@{ id = 2 }); totalPages = 1 }
             }
 
-            $null = Get-NcentralServiceOrganisations -PageNumber 1 -PageSize 50 -SortOrder desc
+            $null = Get-NcentralServiceOrganizations -PageNumber 1 -PageSize 50 -SortOrder desc
 
             $script:calledUri | Should -Match "sortOrder=desc"
         }
@@ -56,7 +56,7 @@ Describe "Get-NcentralServiceOrganisations" {
                 }
             }
 
-            $result = Get-NcentralServiceOrganisations -All
+            $result = Get-NcentralServiceOrganizations -All
 
             $result.id | Should -Contain 1
             $result.id | Should -Contain 2
