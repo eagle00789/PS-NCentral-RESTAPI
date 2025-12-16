@@ -54,7 +54,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] GET /api/device-filters > Get-NcentralDeviceFilters
 - [x] Device Tasks (0/1)
   - [x] GET /api/devices/{deviceId}/scheduled-tasks > Get-NcentralDeviceTasks
-- [ ] Devices (4/11)
+- [ ] Devices (4/12)
   - [x] GET /api/devices/{deviceId}/assets/lifecycle-info > Get-NcentralDeviceAssetsLifecycleInfo
   - [ ] PUT /api/devices/{deviceId}/assets/lifecycle-info
   - [ ] PATCH /api/devices/{deviceId}/assets/lifecycle-info
@@ -62,6 +62,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] GET /api/org-units/{orgUnitId}/devices > Get-NcentralDevices
   - [x] GET /api/devices > Get-NcentralDevices
   - [x] GET /api/devices/{deviceId} > Get-NcentralDevice
+  - [ ] DELETE /api/devices/{deviceId}
   - [x] GET /api/devices/{deviceId}/service-monitor-status > Get-NcentralDeviceServiceMonitorStatus
   - [x] GET /api/devices/{deviceId}/assets > Get-NcentralDeviceAssets
   - [x] GET /api/devices/{deviceId}/activation-key > Get-NcentralDeviceActivationKey
@@ -88,10 +89,14 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [ ] GET /api/org-units/{orgUnitId}/children
   - [ ] GET /api/customers
   - [ ] GET /api/customers/{customerId}
-- [ ] PSA (2/5)
+- [ ] Patch Reports (0/2)
+  - [ ] POST /api/report/patch-comparison
+  - [ ] GET /api/report/{reportId}
+- [ ] PSA (2/6)
   - [ ] POST /api/standard-psa/{psaType}/credential
   - [ ] POST /api/custom-psa/tickets/{customPsaTicketId}
   - [x] ~~GET /api/standard-psa > won't be implemented as it only returns a list of available endpoints~~
+  - [ ] GET /api/standard-psa/customer-mapping/{customerId}
   - [x] ~~GET /api/custom-psa > won't be implemented as it only returns a list of available endpoints~~
   - [x] ~~GET /api/custom-psa/tickets > won't be implemented as it only returns a list of available endpoints~~
 - [x] Registration Tokens (0/3)
@@ -104,6 +109,9 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] GET /api/scheduled-tasks/{taskId} > Get-NcentralScheduledTask
   - [x] GET /api/scheduled-tasks/{taskId}/status > Get-NcentralScheduledTaskStatus
   - [x] GET /api/scheduled-tasks/{taskId}/status/details > Get-NcentralScheduledTaskStatusDetails
+- [ ] Software Installers (0/2)
+  - [ ] GET /api/customers/{customerId}/software/installers
+  - [ ] POST /api/customers/{customerId}/software/installers
 - [ ] User Roles (1/3)
   - [x] GET /api/org-units/{orgUnitId}/user-roles > Get-NcentralUserRoles
   - [ ] POST /api/org-units/{orgUnitId}/user-roles
@@ -112,7 +120,7 @@ Behind each category is a number defining how many API endpoints are remaining o
   - [x] ~~GET /api/users > won't be implemented as it only returns a list of available endpoints~~
   - [x] GET /api/org-units/{orgUnitId}/users > Get-NcentralUsers
 
-Total Endpoints: 74
+Total Endpoints: 80
 
 Finished Endpoints (including the endpoints that won't be implemented): 44
 
