@@ -18,7 +18,7 @@ The Powershell Gallery version can be found at [Powershell Gallery](https://www.
 
 ## Remaining Categories
 
-The list below is based on the NFR unit running N-Central 2025.3.1.1 provided by N-Able.
+The list below is based on the NFR unit running N-Central 2026.1.0.503 provided by N-Able.
 
 Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
 - [ ] Access Groups (2/5)
