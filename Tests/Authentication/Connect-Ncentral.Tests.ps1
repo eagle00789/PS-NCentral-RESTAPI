@@ -93,6 +93,24 @@ Describe "Connect-Ncentral" {
             $result | Should -BeNullOrEmpty
             $errors | Should -Not -BeNullOrEmpty
             $errors[0].ToString() | Should -Match "Authentication failed"
+            $script:BaseUrl | Should -BeNullOrEmpty
+            $script:AccessToken | Should -BeNullOrEmpty
+            $script:RefreshToken | Should -BeNullOrEmpty
+            $script:Connected | Should -BeFalse
+        }
+
+        It "Clears an existing connection when reconnecting fails" {
+            $script:BaseUrl = "https://old-server.example.com"
+            $script:AccessToken = "old-access-token"
+            $script:RefreshToken = "old-refresh-token"
+            $script:Connected = $true
+
+            $null = Connect-Ncentral -JwtToken "badtoken" -BaseUrl "ncentral.example.com" -ErrorAction SilentlyContinue
+
+            $script:BaseUrl | Should -BeNullOrEmpty
+            $script:AccessToken | Should -BeNullOrEmpty
+            $script:RefreshToken | Should -BeNullOrEmpty
+            $script:Connected | Should -BeFalse
         }
     }
 }

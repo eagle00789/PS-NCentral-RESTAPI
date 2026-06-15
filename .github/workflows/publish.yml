@@ -84,21 +84,19 @@ jobs:
             # Write test + coverage results to console
             $result | Out-Default
 
-            # Parse the numeric percentage from the CodeCoverage string (e.g. "10.41% / 75%")
-            if ($null -ne $result.CodeCoverage) {
-                $coverageStr = $result.CodeCoverage.ToString().Split('/')[0].Trim()  # "10.41%"
-                $coverage = [double]($coverageStr.TrimEnd('%'))                      # 10.41 as [double]
+            if ($null -ne $result.CodeCoverage -and
+                $null -ne $result.CodeCoverage.CoveragePercent) {
+                $coverage = [double]$result.CodeCoverage.CoveragePercent
             }
             else {
-                $coverage = 0.0
+              $coverage = 0.0
             }
             Write-Host "Code coverage: $coverage %"
 
-            # Optional: fail workflow if coverage < threshold
-            $threshold = 1
+            $threshold = 50
             if ($coverage -lt $threshold) {
-                Write-Error "Code coverage $coverage% below threshold ($threshold%)."
-                exit 1
+              Write-Error "Code coverage $coverage% below threshold ($threshold%)."
+              exit 1
             }
 
             # Fail workflow if any tests failed
@@ -138,6 +136,21 @@ jobs:
       run: |
         if (-not (Get-Module -ListAvailable -Name PowerShellGet)) {
           Install-Module -Name PowerShellGet -Force -Scope CurrentUser -AllowClobber
+        }
+
+    - name: Verify version is unreleased
+      if: ${{ (github.event.inputs.dry_run || 'true') == 'false' }}
+      shell: pwsh
+      run: |
+        git fetch --tags
+        $manifest = Get-ChildItem -Recurse -Include *.psd1 |
+          Where-Object { $_.Name -notlike '*Tests*' } |
+          Select-Object -First 1
+        $version = (Import-PowerShellDataFile -Path $manifest.FullName).ModuleVersion.ToString()
+        $tag = "v$version"
+        if (git tag --list $tag) {
+          Write-Error "Tag $tag already exists. Increment ModuleVersion before publishing."
+          exit 1
         }
 
     - name: Prepare Module Files
@@ -188,13 +201,6 @@ jobs:
       run: |
         Publish-Module -Path "${{ env.PUBLISH_DIR }}" -NuGetApiKey $env:PSGALLERY_API_KEY
         Write-Host "✅ Module published."
-
-    - name: Delete existing Git tag (if any)
-      if: ${{ (github.event.inputs.dry_run || 'true') == 'false' }}
-      run: |
-        git fetch --tags
-        git tag -d "v${{ env.VERSION }}" 2>$null || echo "No local tag"
-        git push origin :refs/tags/v${{ env.VERSION }} 2>$null || echo "No remote tag"
 
     - name: Create Git tag
       if: ${{ (github.event.inputs.dry_run || 'true') == 'false' }}

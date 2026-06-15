@@ -51,5 +51,17 @@ Describe "Get-NcentralAuthenticationRefresh" {
 
             $info | Should -Match "successfully refreshed"
         }
+
+        It "does not replace tokens when the refresh response is incomplete" {
+            $script:AccessToken = "existing-access-token"
+            $script:RefreshToken = "existing-refresh-token"
+            Mock Invoke-NcentralApi {
+                return @{ tokens = @{ access = @{ token = $null }; refresh = @{ token = $null } } }
+            }
+
+            { Get-NcentralAuthenticationRefresh } | Should -Throw "*did not contain access and refresh tokens*"
+            $script:AccessToken | Should -Be "existing-access-token"
+            $script:RefreshToken | Should -Be "existing-refresh-token"
+        }
     }
 }

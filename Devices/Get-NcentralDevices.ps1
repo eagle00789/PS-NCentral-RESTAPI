@@ -56,54 +56,48 @@ This example fetches all N-Central devices that match with filter ID 38225172
     if ($PSBoundParameters.ContainsKey('SortOrder')) {
         $SortOrder = $SortOrder.ToLower()
     }
+
+    if ($PSBoundParameters.ContainsKey('OrgUnitID')) {
+        $uri = "$script:BaseUrl/api/org-units/$OrgUnitID/devices"
+        Show-Warning
+    }
+    else {
+        $uri = "$script:BaseUrl/api/devices"
+    }
+
+    $query = @{
+        pageNumber = $PageNumber
+        pageSize = $PageSize
+    }
+    if ($PSBoundParameters.ContainsKey('SortOrder')) {
+        $query.sortOrder = $SortOrder
+    }
+    if ($PSBoundParameters.ContainsKey('FilterID')) {
+        $query.filterId = $FilterID
+    }
+
     switch ($PsCmdlet.ParameterSetName) {
         'All' {
-            if ($PSBoundParameters.ContainsKey('OrgUnitID')) {
-                $uri = "$script:BaseUrl/api/org-units/$OrgUnitID/devices?pageNumber=$PageNumber&pageSize=$PageSize"
-                Show-Warning
-            } else {
-                $uri = "$script:BaseUrl/api/devices?pageNumber=$PageNumber&pageSize=$PageSize"
+            $rawData = Invoke-NcentralApi -Uri $uri -Method "GET" -Query $query
+            $pages = [Math]::Max([int]$rawData.totalPages, 1)
+            $data = [System.Collections.Generic.List[object]]::new()
+
+            foreach ($item in @($rawData.data)) {
+                $data.Add($item)
             }
-            if ($PSBoundParameters.ContainsKey('SortOrder')) {
-                $uri = "$uri&sortOrder=$SortOrder"
-            }
-            if ($PSBoundParameters.ContainsKey('FilterID')) {
-                $uri = "$uri&filterId=$FilterID"
-            }
-            $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
-            $Pages = $RawData.totalPages
-            $Data = New-Object System.Collections.Generic.List[Object]
-            $Data.AddRange($RawData.data)
-            For ($PageNumber = 2; $PageNumber -le $Pages; $PageNumber++) {
-                if ($PSBoundParameters.ContainsKey('OrgUnitID')) {
-                    $uri = "$script:BaseUrl/api/org-units/$OrgUnitID/devices?pageNumber=$PageNumber&pageSize=$PageSize"
-                } else {
-                    $uri = "$script:BaseUrl/api/devices?pageNumber=$PageNumber&pageSize=$PageSize"
+
+            for ($currentPage = 2; $currentPage -le $pages; $currentPage++) {
+                $query.pageNumber = $currentPage
+                $page = Invoke-NcentralApi -Uri $uri -Method "GET" -Query $query
+                foreach ($item in @($page.data)) {
+                    $data.Add($item)
                 }
-                if ($PSBoundParameters.ContainsKey('SortOrder')) {
-                    $uri = "$uri&sortOrder=$SortOrder"
-                }
-                if ($PSBoundParameters.ContainsKey('FilterID')) {
-                    $uri = "$uri&filterId=$FilterID"
-                }
-                $Data.AddRange((Invoke-NcentralApi -Uri $uri -Method "GET").data)
             }
-            return $Data
+
+            return $data
         }
         'Paged' {
-            if ($PSBoundParameters.ContainsKey('OrgUnitID')) {
-                $uri = "$script:BaseUrl/api/org-units/$OrgUnitID/devices?pageNumber=$PageNumber&pageSize=$PageSize"
-                Show-Warning
-            } else {
-                $uri = "$script:BaseUrl/api/devices?pageNumber=$PageNumber&pageSize=$PageSize"
-            }
-            if ($PSBoundParameters.ContainsKey('SortOrder')) {
-                $uri = "$uri&sortOrder=$SortOrder"
-            }
-            if ($PSBoundParameters.ContainsKey('FilterID')) {
-                $uri = "$uri&filterId=$FilterID"
-            }
-            return (Invoke-NcentralApi -Uri $uri -Method "GET").data
+            return (Invoke-NcentralApi -Uri $uri -Method "GET" -Query $query).data
         }
     }
 }

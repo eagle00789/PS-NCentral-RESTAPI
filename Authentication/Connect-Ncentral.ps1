@@ -26,11 +26,17 @@ This will connect to the NCentral server hosted on ncentral.example.com using th
 
     try {
 		$BaseUrl = 'https://' + ($BaseUrl -replace '^.*://', '')
-        $script:BaseUrl = $BaseUrl.TrimEnd('/')
-        $uri = "$script:BaseUrl/api/auth/authenticate"
+        $normalizedBaseUrl = $BaseUrl.TrimEnd('/')
+        $uri = "$normalizedBaseUrl/api/auth/authenticate"
         $headers = @{ Authorization = "Bearer $JwtToken" }
         $response = Invoke-RestMethod -Uri $uri -Method Post -Headers $headers
 
+        if ([string]::IsNullOrWhiteSpace($response.tokens.access.token) -or
+            [string]::IsNullOrWhiteSpace($response.tokens.refresh.token)) {
+            throw "Authentication response did not contain access and refresh tokens."
+        }
+
+        $script:BaseUrl = $normalizedBaseUrl
         $script:AccessToken = $response.tokens.access.token
         $script:RefreshToken = $response.tokens.refresh.token
         $script:Connected = $true
@@ -38,7 +44,12 @@ This will connect to the NCentral server hosted on ncentral.example.com using th
         $ServerInfo = Get-NcentralApiServerInfo
 
         Write-Information "Succesfully connected to N-Central version $($ServerInfo.ncentral) on $BaseUrl" -InformationAction Continue
-    } catch {
+    }
+    catch {
+        $script:BaseUrl = $null
+        $script:AccessToken = $null
+        $script:RefreshToken = $null
+        $script:Connected = $false
         Write-Error "Failed to authenticate: $_"
     }
 }

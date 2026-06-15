@@ -19,7 +19,13 @@ This is the only way to refresh the API-Access Token
     $body = $script:RefreshToken
 
     $tokens = Invoke-NcentralApi -Uri $uri -Method "POST" -Body $body -ConvertToJson $false
+
+    if ([string]::IsNullOrWhiteSpace($tokens.tokens.access.token) -or
+        [string]::IsNullOrWhiteSpace($tokens.tokens.refresh.token)) {
+        throw "Token refresh response did not contain access and refresh tokens."
+    }
+
     $script:AccessToken = $tokens.tokens.access.token
     $script:RefreshToken = $tokens.tokens.refresh.token
-    Write-Information "The Access and Refresh tokens have been successfully refreshed"
+    Write-Information "The Access and Refresh tokens have been successfully refreshed."
 }

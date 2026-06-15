@@ -20,13 +20,31 @@ Describe "Invoke-NcentralApi" {
             }
         }
 
-        It "Appends query parameters to Uri" {
+        It "Appends encoded query parameters to Uri" {
+            $script:CapturedUri = $null
+            Mock Invoke-RestMethod {
+                $script:CapturedUri = $Uri
+                return "ok"
+            }
+
+            $null = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" -Query @{
+                id = 42
+                name = "bob smith"
+                filter = "x&y"
+            }
+
+            Assert-MockCalled Invoke-RestMethod -Times 1
+            $script:CapturedUri.AbsoluteUri |
+                Should -Be "https://server/api/test?filter=x%26y&id=42&name=bob%20smith"
+        }
+
+        It "Appends query parameters with an ampersand when the Uri already has a query" {
             Mock Invoke-RestMethod { return "ok" }
 
-            $null = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" -Query @{ id = 42; name = "bob" }
+            $null = Invoke-NcentralApi -Uri "https://server/api/test?existing=true" -Method "GET" -Query @{ id = 42 }
 
             Assert-MockCalled Invoke-RestMethod -Times 1 -ParameterFilter {
-                $Uri -match "id=42" -and $Uri -match "name=bob"
+                $Uri -eq "https://server/api/test?existing=true&id=42"
             }
         }
 
@@ -54,7 +72,7 @@ Describe "Invoke-NcentralApi" {
     }
 
     Context "Error handling" {
-        It "Returns null and warns when 401 unauthorized occurs" {
+        It "Throws a clear error when 401 unauthorized occurs" {
             Mock Invoke-RestMethod {
                 $ex = New-Object Exception "Unauthorized"
                 $status = New-Object PSObject -Property @{ value__ = [int][System.Net.HttpStatusCode]::Unauthorized }
@@ -63,11 +81,11 @@ Describe "Invoke-NcentralApi" {
                 throw $ex
             }
 
-            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET"
-            $result | Should -BeNullOrEmpty
+            { Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" } |
+                Should -Throw "*Authentication failed or expired*"
         }
 
-        It "returns null and warns when API rate limit exceeded" {
+        It "Throws a clear error when the API rate limit is exceeded" {
             Mock Invoke-RestMethod {
                 $resp = New-Object PSObject -Property @{
                     StatusCode = New-Object PSObject -Property @{ value__ = 429 }
@@ -77,14 +95,11 @@ Describe "Invoke-NcentralApi" {
                 throw $ex
             }
 
-            $warning = $null
-            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method GET -WarningVariable warning
-
-            $result | Should -BeNullOrEmpty
-            $warning | Should -Match "Rate limit exceeded"
+            { Invoke-NcentralApi -Uri "https://server/api/test" -Method GET } |
+                Should -Throw "*Rate limit exceeded*"
         }
 
-        It "returns null and writes error when server error (500)" {
+        It "Throws when the server returns an error" {
             Mock -CommandName Invoke-RestMethod {
                 throw [System.Net.WebException]::new(
                     "Server error",
@@ -92,12 +107,8 @@ Describe "Invoke-NcentralApi" {
                 )
             }
 
-            $errors = $null
-            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method Get -ErrorAction SilentlyContinue -ErrorVariable +errors
-
-            $result | Should -BeNullOrEmpty
-            $errors | Should -Not -BeNullOrEmpty
-            $errors[0].ToString() | Should -Match "Server error"
+            { Invoke-NcentralApi -Uri "https://server/api/test" -Method Get } |
+                Should -Throw "*Server error*"
         }
 
         It "Does not pass -Body when none is provided" {
@@ -107,16 +118,6 @@ Describe "Invoke-NcentralApi" {
 
             Assert-MockCalled Invoke-RestMethod -Times 1 -ParameterFilter {
                 -not ($PSBoundParameters.ContainsKey("Body"))
-            }
-        }
-
-        It "Appends raw query parameters even with special characters" {
-            Mock Invoke-RestMethod { return "ok" }
-
-            $null = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" -Query @{ name = "bob smith"; filter = "x&y" }
-
-            Assert-MockCalled Invoke-RestMethod -Times 1 -ParameterFilter {
-                $Uri -match "name=bob smith" -and $Uri -match "filter=x&y"
             }
         }
 
@@ -134,27 +135,17 @@ Describe "Invoke-NcentralApi" {
         It "Handles exceptions without HTTP status code" {
             Mock Invoke-RestMethod { throw (New-Object Exception "Some other error") }
 
-            $errors = $null
-            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method GET -ErrorAction SilentlyContinue -ErrorVariable +errors
-
-            $result | Should -BeNullOrEmpty
-            $errors[0].ToString() | Should -Match "Some other error"
+            { Invoke-NcentralApi -Uri "https://server/api/test" -Method GET } |
+                Should -Throw "*Some other error*"
         }
 
-        It "Emits correct warning message on 401 Unauthorized" {
-            Mock Invoke-RestMethod {
-                $ex = New-Object Exception "Unauthorized"
-                $status = New-Object PSObject -Property @{ value__ = [int][System.Net.HttpStatusCode]::Unauthorized }
-                $resp = New-Object PSObject -Property @{ StatusCode = $status }
-                $ex | Add-Member -MemberType NoteProperty -Name Response -Value $resp
-                throw $ex
-            }
+        It "Throws before making a request when no access token is available" {
+            $script:AccessToken = $null
+            Mock Invoke-RestMethod { return "not called" }
 
-            $warning = $null
-            $result = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" -WarningVariable warning
-
-            $result | Should -BeNullOrEmpty
-            $warning | Should -Match "Authentication failed or expired"
+            { Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" } |
+                Should -Throw "*Not connected to N-Central*"
+            Assert-MockCalled Invoke-RestMethod -Times 0
         }
     }
 }
