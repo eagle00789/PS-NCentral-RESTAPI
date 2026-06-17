@@ -20,9 +20,6 @@ This example fetches all N-Central Access Groups for a customer with ID 50
         [Parameter(Mandatory = $True)]
         [int]$AccessGroupID
     )
-
-    Show-Warning
-
     $uri = "$script:BaseUrl/api/access-groups/$AccessGroupID"
 
     return (Invoke-NcentralApi -Uri $uri -Method "GET").data

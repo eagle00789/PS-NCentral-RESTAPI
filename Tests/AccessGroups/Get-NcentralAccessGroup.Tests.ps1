@@ -25,17 +25,6 @@ Describe "Get-NcentralAccessGroup" {
         }
     }
 
-    Context "Warnings" {
-        It "Calls Show-Warning once" {
-            Mock Invoke-NcentralApi { return @{ data = @{ id = 100 } } }
-            Mock Show-Warning {}
-
-            $null = Get-NcentralAccessGroup -AccessGroupID 100
-
-            Assert-MockCalled Show-Warning -Times 1
-        }
-    }
-
     Context "Validation / Negative tests" {
         It "Throws when AccessGroupID is missing (mandatory)" {
             Mock Invoke-NcentralApi { return @{ data = @{ id = 5 } } }

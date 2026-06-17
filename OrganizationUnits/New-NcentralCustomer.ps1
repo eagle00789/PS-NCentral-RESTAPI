@@ -125,9 +125,6 @@ function New-NcentralCustomer {
         [ValidateSet("Essential", "Professional")]
         [string]$licenseType
     )
-
-    Show-Warning
-
     $body = @{
         customerName      = $customerName
         contactFirstName  = $contactFirstName

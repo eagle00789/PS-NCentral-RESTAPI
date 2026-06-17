@@ -11,123 +11,82 @@ This module will be expanded to allow for the full range of N-Central Rest API f
 This module is published on the powershell gallery, however the version on Powershell Gallery my not be the same as the version on GitHub.
 The Powershell Gallery version can be found at [Powershell Gallery](https://www.powershellgallery.com/packages/PS-NCentral-RESTAPI)
 
+## AI Usage
+
+AI has been used to write all the corresponding pester tests that is done before uploading the package to the gallery.
+
 ## PREVIEW API Endpoints
 
 > [!WARNING]
 > All endpoints that are currently marked as preview in the API of N-Central, will always output a warning on the console stating that the endpoint is still a preview.
 
-## Remaining Categories
+## Endpoint Coverage
 
-The list below is based on the NFR unit running N-Central 2026.1.0.503 provided by N-Able.
+The list below is based on the live NFR API Explorer for N-Central 2026.3.0.11.
 
-Behind each category is a number defining how many API endpoints are remaining of the total number of API endpoints are in that category
-- [ ] Access Groups (2/5)
-  - [ ] POST /api/org-units/{orgUnitId}/device-access-groups
-  - [x] GET /api/org-units/{orgUnitId}/access-groups > Get-NcentralAccessGroups
-  - [ ] POST /api/org-units/{orgUnitId}/access-groups
-  - [x] ~~GET /api/access-groups > won't be implemented as it only returns a list of available endpoints~~
-  - [x] GET /api/access-groups/{accessGroupId} > Get-NcentralAccessGroup
-- [x] Active Issues (0/1)
-  - [x] GET /api/org-units/{orgUnitId}/active-issues > Get-NcentralActiveIssues
-- [x] API-Service (0/5)
-  - [x] ~~POST /api/server-info/extra/authenticated > Won't be implemented as it's a duplicate of the API Endpoint /api/server-info/extra with extra steps.~~
-  - [x] ~~GET /api > won't be implemented as it only returns a list of available endpoints~~
-  - [x] GET /api/server-info > Get-NcentralApiServerInfo
-  - [x] GET /api/server-info/extra > Get-NCentralApiServerInfoExtra
-  - [x] GET /api/health > Get-NcentralApiServerHealth
-- [x] Authentication (0/4)
-  - [x] POST /api/auth/refresh > Get-NcentralAuthenticationRefresh
-  - [x] POST /api/auth/authenticate > Connect-Ncentral
-  - [x] ~~GET /api/auth > won't be implemented as it only returns a list of available endpoints~~
-  - [x] GET /api/auth/validate > Get-NcentralAuthenticationValidation
-- [ ] Custom Properties (8/9)
-  - [ ] PUT /api/org-units/{orgUnitId}/org-custom-property-defaults
-  - [x] GET /api/org-units/{orgUnitId}/custom-properties/{propertyId}
-  - [ ] PUT /api/org-units/{orgUnitId}/custom-properties/{propertyId}
-  - [ ] GET /api/devices/{deviceId}/custom-properties/{propertyId}
-  - [ ] PUT /api/devices/{deviceId}/custom-properties/{propertyId}
-  - [ ] GET /api/org-units/{orgUnitId}/org-custom-property-defaults/{propertyId}
-  - [x] GET /api/org-units/{orgUnitId}/custom-properties > Get-NcentralCustomProperties
-  - [ ] GET /api/org-units/{orgUnitId}/custom-properties/device-custom-property-defaults/{propertyId}
-  - [ ] GET /api/devices/{deviceId}/custom-properties
-- [x] Device Filters (0/1)
-  - [x] GET /api/device-filters > Get-NcentralDeviceFilters
-- [x] Device Tasks (0/1)
-  - [x] GET /api/devices/{deviceId}/scheduled-tasks > Get-NcentralDeviceTasks
-- [ ] Devices (4/12)
-  - [x] GET /api/devices/{deviceId}/assets/lifecycle-info > Get-NcentralDeviceAssetsLifecycleInfo
-  - [ ] PUT /api/devices/{deviceId}/assets/lifecycle-info
-  - [ ] PATCH /api/devices/{deviceId}/assets/lifecycle-info
-  - [ ] POST /api/device
-  - [x] GET /api/org-units/{orgUnitId}/devices > Get-NcentralDevices
-  - [x] GET /api/devices > Get-NcentralDevices
-  - [x] GET /api/devices/{deviceId} > Get-NcentralDevice
-  - [ ] DELETE /api/devices/{deviceId}
-  - [x] GET /api/devices/{deviceId}/service-monitor-status > Get-NcentralDeviceServiceMonitorStatus
-  - [x] GET /api/devices/{deviceId}/assets > Get-NcentralDeviceAssets
-  - [x] GET /api/devices/{deviceId}/activation-key > Get-NcentralDeviceActivationKey
-  - [ ] GET /api/appliance-tasks/{taskId}
-- [ ] Job Statuses (1/1)
-  - [ ] GET /api/org-units/{orgUnitId}/job-statuses
+The explorer currently exposes 101 operations in total.
+
+- 8 operations are intentionally not implemented in this module because they only return a link collection of child endpoints:
+  - `GET /api`
+  - `GET /api/access-groups`
+  - `GET /api/auth`
+  - `GET /api/custom-psa`
+  - `GET /api/custom-psa/tickets`
+  - `GET /api/scheduled-tasks`
+  - `GET /api/standard-psa`
+  - `GET /api/users`
+- 93 non-link operations remain after excluding those discovery endpoints.
+- 92 of those non-link operations are currently exported by this module.
+- `New-NcentralMaintenanceWindow` is intentionally not exported right now because `POST /api/devices/maintenance-windows` is not fully finished yet, based on clarification from N-able.
+
+Category breakdown:
+
+- [x] Access Groups (5/5, including 1 link-collection endpoint intentionally skipped)
+- [x] Active Issues (1/1)
+- [x] API-Service (6/6, including 1 link-collection endpoint intentionally skipped)
+- [x] Authentication (6/6, including 1 link-collection endpoint intentionally skipped)
+- [x] Custom Properties (9/9)
+- [x] Device Filters (1/1)
+- [x] Device Tasks (1/1)
+- [x] Devices (18/18)
+- [x] Job Statuses (1/1)
 - [ ] Maintenance Windows (3/4)
-  - [ ] PUT /api/devices/maintenance-windows
-  - [ ] POST /api/devices/maintenance-windows
-  - [ ] DELETE /api/devices/maintenance-windows
-  - [x] GET /api/devices/{deviceId}/maintenance-windows > Get-NcentralMaintenanceWindows
-- [ ] Organisation Units (11/14)
-  - [x] GET /api/service-orgs > Get-NcentralServiceOrganisations
-  - [ ] POST /api/service-orgs
-  - [x] GET /api/service-orgs/{soId}/customers > Get-NcentralServiceOrganisationsCustomers
-  - [x] POST /api/service-orgs/{soId}/customers > New-NcentralCustomer
-  - [x] GET /api/customers/{customerId}/sites > Get-NcentralCustomerSites
-  - [ ] POST /api/customers/{customerId}/sites
-  - [x] GET /api/sites > Get-NcentralSites
-  - [x] GET /api/sites/{siteId} > Get-NcentralSite
-  - [ ] GET /api/service-orgs/{soId}
-  - [ ] GET /api/org-units
-  - [ ] GET /api/org-units/{orgUnitId}
-  - [ ] GET /api/org-units/{orgUnitId}/children
-  - [ ] GET /api/customers
-  - [ ] GET /api/customers/{customerId}
-- [ ] Patch Reports (0/2)
-  - [ ] POST /api/report/patch-comparison
-  - [ ] GET /api/report/{reportId}
-- [ ] PSA (2/6)
-  - [ ] POST /api/standard-psa/{psaType}/credential
-  - [ ] POST /api/custom-psa/tickets/{customPsaTicketId}
-  - [x] ~~GET /api/standard-psa > won't be implemented as it only returns a list of available endpoints~~
-  - [ ] GET /api/standard-psa/customer-mapping/{customerId}
-  - [x] ~~GET /api/custom-psa > won't be implemented as it only returns a list of available endpoints~~
-  - [x] ~~GET /api/custom-psa/tickets > won't be implemented as it only returns a list of available endpoints~~
-- [x] Registration Tokens (0/3)
-  - [x] GET /api/sites/{siteId}/registration-token > Get-NcentralRegistrationToken
-  - [x] GET /api/org-units/{orgUnitId}/registration-token > Get-NcentralRegistrationToken
-  - [x] GET /api/customers/{customerId}/registration-token > Get-NcentralRegistrationToken
-- [ ] Scheduled Tasks (1/5)
-  - [ ] POST /api/scheduled-tasks/direct
-  - [x] ~~GET /api/scheduled-tasks > won't be implemented as it only returns a list of available endpoints~~
-  - [x] GET /api/scheduled-tasks/{taskId} > Get-NcentralScheduledTask
-  - [x] GET /api/scheduled-tasks/{taskId}/status > Get-NcentralScheduledTaskStatus
-  - [x] GET /api/scheduled-tasks/{taskId}/status/details > Get-NcentralScheduledTaskStatusDetails
-- [ ] Software Installers (0/2)
-  - [ ] GET /api/customers/{customerId}/software/installers
-  - [ ] POST /api/customers/{customerId}/software/installers
-- [ ] User Roles (1/3)
-  - [x] GET /api/org-units/{orgUnitId}/user-roles > Get-NcentralUserRoles
-  - [ ] POST /api/org-units/{orgUnitId}/user-roles
-  - [x] GET /api/org-units/{orgUnitId}/user-roles/{userRoleId} > Get-NcentralUserRoles
-- [x] Users (0/2)
-  - [x] ~~GET /api/users > won't be implemented as it only returns a list of available endpoints~~
-  - [x] GET /api/org-units/{orgUnitId}/users > Get-NcentralUsers
-
-Total Endpoints: 80
-
-Finished Endpoints (including the endpoints that won't be implemented): 44
+- [x] Organisation Units (16/16)
+- [x] Patch Reports (2/2)
+- [x] PSA (15/15, including 3 link-collection endpoints intentionally skipped)
+- [x] Registration Tokens (3/3)
+- [x] Scheduled Tasks (5/5, including 1 link-collection endpoint intentionally skipped)
+- [x] Software Installers (2/2)
+- [x] User Roles (3/3)
+- [x] Users (3/3, including 1 link-collection endpoint intentionally skipped)
 
 ## Future enhancements
 
-Currently not all API endpoints are built into this module. The missing endpoints are still being added to this module.
-None of the endpoints that have paging, have the sortby and select parameter implemented. This still has to be implemented.
+Nearly all non-link endpoints currently exposed by the live API Explorer are now built into this module.
+The current exception is `POST /api/devices/maintenance-windows`, which remains unfinished and is therefore not exported at this time.
+Some paged endpoints still do not expose every optional explorer parameter such as `select`.
+
+## Recently Added Endpoints
+
+The module now also includes commands for additional endpoint groups that were previously missing:
+
+- Authentication: SSO connect and API logout
+- API-Service: authenticated extra server info and server time
+- Access Groups: create organization and device access groups
+- Custom Properties: device-level and default property retrieval and updates
+- Devices: create/delete device, lifecycle updates, appliance task lookup, and device notes operations
+- Job Statuses: organization unit job status retrieval
+- Maintenance Windows: modify and delete maintenance windows
+- Organization Units: customer/service organization/site/customer limits operations
+- Patch Reports: create and retrieve patch comparison reports
+- Scheduled Tasks: direct task creation
+- Software Installers: list installers and generate download links
+- Standard PSA: credential validation, mappings, companies, contacts and sites
+- Custom PSA: create, retrieve, reopen and resolve custom PSA tickets
+- Users: authenticated user profile
+- User Roles: preview user role creation
+
+Preview warnings are now only shown for endpoints that are still marked as preview in the live API Explorer.
 
 ## Contribute
 

@@ -13,8 +13,6 @@ Get-NcentralApiServerInfoExtra
     [cmdletbinding()]
     param()
     
-    Show-Warning
-
     $uri = "$script:BaseUrl/api/server-info/extra"
     return (Invoke-NcentralApi -Uri $uri -Method "GET").data._extra
 }

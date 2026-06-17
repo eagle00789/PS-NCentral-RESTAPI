@@ -44,9 +44,6 @@ This example fetches the custom properties defined in N-Central for OrgUnitId 50
         [Parameter(Mandatory = $false, ParameterSetName = 'Single')]
         [int]$PropertyId
     )
-
-    Show-Warning
-
     switch ($PsCmdlet.ParameterSetName) {
         'Multi' {
             $uri = "$script:BaseUrl/api/org-units/$OrgUnitId/custom-properties?pageNumber=$PageNumber&pageSize=$PageSize"

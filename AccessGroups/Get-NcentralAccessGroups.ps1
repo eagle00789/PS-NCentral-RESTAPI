@@ -45,9 +45,6 @@ This example fetches all N-Central Access Groups for a customer with ID 50
         [ValidateSet("asc", "ascending", "desc", "descending", "neutral", "reverse")]
         [string]$SortOrder
     )
-
-    Show-Warning
-
     if ($PSBoundParameters.ContainsKey('SortOrder')) {
         $SortOrder = $SortOrder.ToLower()
     }

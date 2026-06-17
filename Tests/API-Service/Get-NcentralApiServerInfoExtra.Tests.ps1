@@ -2,16 +2,10 @@ Describe "Get-NcentralApiServerInfoExtra" {
     BeforeAll {
         . "$PSScriptRoot\..\..\Internal\Helpers.ps1"
         . "$PSScriptRoot\..\..\API-Service\Get-NcentralApiServerInfoExtra.ps1"
-        Mock Show-Warning
         Mock Invoke-NcentralApi
     }
 
     Context "Function behavior" {
-        It "Calls Show-Warning once" {
-            Get-NcentralApiServerInfoExtra
-            Assert-MockCalled Show-Warning -Exactly 1 -Scope It
-        }
-
         It "Calls Invoke-NcentralApi with correct URI and method" {
             Get-NcentralApiServerInfoExtra
             Assert-MockCalled Invoke-NcentralApi -Exactly 1 -Scope It -ParameterFilter {

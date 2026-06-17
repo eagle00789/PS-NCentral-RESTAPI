@@ -12,7 +12,6 @@ Describe "New-NcentralCustomer" {
     Context "Request building" {
         It "Calls Invoke-NcentralApi with required customerName only" {
             Mock Invoke-NcentralApi { return @{ id = 123 } }
-            Mock Show-Warning {}
 
             $result = New-NcentralCustomer -customerName "Acme"
 
@@ -26,7 +25,6 @@ Describe "New-NcentralCustomer" {
 
         It "Uses provided SoId in Uri" {
             Mock Invoke-NcentralApi { return "ok" }
-            Mock Show-Warning {}
 
             $null = New-NcentralCustomer -SoId 99 -customerName "BetaCo"
 
@@ -37,7 +35,6 @@ Describe "New-NcentralCustomer" {
 
         It "Includes non-null parameters in body" {
             Mock Invoke-NcentralApi { return "ok" }
-            Mock Show-Warning {}
 
             $params = @{
                 customerName = "TestCo"
@@ -55,7 +52,6 @@ Describe "New-NcentralCustomer" {
 
         It "Omits parameters that are null or empty" {
             Mock Invoke-NcentralApi { return "ok" }
-            Mock Show-Warning {}
 
             $params = @{
                 customerName = "TestCo"
@@ -72,7 +68,6 @@ Describe "New-NcentralCustomer" {
 
         It "Accepts licenseType from ValidateSet" {
             Mock Invoke-NcentralApi { return "ok" }
-            Mock Show-Warning {}
 
             $null = New-NcentralCustomer -customerName "LicTest" -licenseType "Professional"
 
@@ -82,28 +77,15 @@ Describe "New-NcentralCustomer" {
         }
     }
 
-    Context "Warnings" {
-        It "Calls Show-Warning at least once" {
-            Mock Invoke-NcentralApi { return "ok" }
-            Mock Show-Warning {}
-
-            $null = New-NcentralCustomer -customerName "WarnTest"
-
-            Assert-MockCalled Show-Warning -Times 1
-        }
-    }
-
     Context "Validation / Negative tests" {
         It "Throws when customerName is missing (mandatory)" {
             Mock Invoke-NcentralApi { return "ok" }
-            Mock Show-Warning {}
 
             { New-NcentralCustomer @{} } | Should -Throw -ErrorId "ParameterArgumentTransformationError,New-NcentralCustomer"
         }
 
         It "Throws when licenseType is not in ValidateSet" {
             Mock Invoke-NcentralApi { return "ok" }
-            Mock Show-Warning {}
 
             { New-NcentralCustomer -customerName "InvalidLic" -licenseType "Gold" } | Should -Throw
         }

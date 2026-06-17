@@ -20,9 +20,6 @@ This example fetches a single site by id 1085
         [Parameter(Mandatory = $true)]
         [int]$SiteID = 1
     )
-
-    Show-Warning
-
     $uri = "$script:BaseUrl/api/sites/$SiteID"
     return Invoke-NcentralApi -Uri $uri -Method "GET"
 }

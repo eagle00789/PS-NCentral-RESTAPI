@@ -46,9 +46,6 @@ This example fetches all my device filters
         [ValidateSet("asc", "ascending", "desc", "descending")]
         [string]$SortOrder
     )
-
-    Show-Warning
-
     if ($PSBoundParameters.ContainsKey('SortOrder')) {
         $SortOrder = $SortOrder.ToLower()
     }

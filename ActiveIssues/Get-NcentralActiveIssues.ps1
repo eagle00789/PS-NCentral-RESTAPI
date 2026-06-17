@@ -45,9 +45,6 @@ This example fetches all active issues for a customer with ID 50
         [ValidateSet("asc", "ascending", "desc", "descending", "natural", "reverse")]
         [string]$SortOrder
     )
-
-    Show-Warning
-
     if ($PSBoundParameters.ContainsKey('SortOrder')) {
         $SortOrder = $SortOrder.ToLower()
     }

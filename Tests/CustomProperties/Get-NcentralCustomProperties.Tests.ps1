@@ -10,7 +10,6 @@ Describe "Get-NcentralCustomProperties" {
 
     BeforeEach {
         Mock Invoke-NcentralApi { return @{ data = @( @{ id = 1; name = "Prop1" }, @{ id = 2; name = "Prop2" } ) } }
-        Mock Show-Warning {}
     }
 
     Context "Parameter validation" {
@@ -86,10 +85,4 @@ Describe "Get-NcentralCustomProperties" {
         }
     }
 
-    Context "Warnings" {
-        It "calls Show-Warning once per invocation" {
-            Get-NcentralCustomProperties -OrgUnitId $orgUnitId | Out-Null
-            Assert-MockCalled Show-Warning -Times 1
-        }
-    }
 }

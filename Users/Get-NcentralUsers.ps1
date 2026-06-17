@@ -45,9 +45,6 @@ This example fetches all N-Central users for a customer with ID 50
         [ValidateSet("asc", "ascending", "desc", "descending")]
         [string]$SortOrder
     )
-
-    Show-Warning
-
     if ($PSBoundParameters.ContainsKey('SortOrder')) {
         $SortOrder = $SortOrder.ToLower()
     }

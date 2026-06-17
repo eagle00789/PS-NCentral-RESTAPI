@@ -20,9 +20,6 @@ This example fetches all maintenance windows for the device with ID 13245679
         [Parameter(Mandatory = $true)]
         [int]$DeviceID
     )
-
-    Show-Warning
-
     $uri = "$script:BaseUrl/api/devices/$DeviceID/maintenance-windows"
 
     return (Invoke-NcentralApi -Uri $uri -Method "GET").data

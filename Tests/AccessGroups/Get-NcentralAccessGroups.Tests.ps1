@@ -8,9 +8,6 @@ Describe "Get-NcentralAccessGroups" {
         # Reset script variables
         $script:BaseUrl = "https://ncentral.example.com"
 
-        # Default mock for Show-Warning
-        Mock Show-Warning {}
-
         # Default mock for Invoke-NcentralApi
         Mock Invoke-NcentralApi { return @{ data = @("group1","group2"); totalPages = 1 } }
     }
@@ -79,13 +76,6 @@ Describe "Get-NcentralAccessGroups" {
             Assert-MockCalled Invoke-NcentralApi -ParameterFilter {
                 $Uri -match "sortOrder=desc"
             } -Times 1
-        }
-    }
-
-    Context "Warning behavior" {
-        It "Calls Show-Warning once" {
-            $null = Get-NcentralAccessGroups
-            Assert-MockCalled Show-Warning -Times 1
         }
     }
 

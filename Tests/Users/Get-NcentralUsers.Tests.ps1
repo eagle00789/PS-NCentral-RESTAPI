@@ -60,15 +60,4 @@ Describe "Get-NcentralUsers" {
         }
     }
 
-    Context "General behavior" {
-        It "Calls Show-Warning once at the start" {
-            Mock Show-Warning {}
-
-            Mock Invoke-NcentralApi { @{ data = @() } }
-
-            Get-NcentralUsers | Out-Null
-
-            Should -Invoke Show-Warning -Times 1
-        }
-    }
 }

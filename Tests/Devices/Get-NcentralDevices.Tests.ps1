@@ -11,9 +11,6 @@ Describe 'Get-NcentralDevices' {
                 data = @("Device1", "Device2")
             }
         }
-
-        Mock Show-Warning { }
-
         # Zet een dummy BaseUrl
         $script:BaseUrl = 'https://dummy-ncentral.local'
     }
@@ -61,10 +58,6 @@ Describe 'Get-NcentralDevices' {
             Assert-MockCalled Invoke-NcentralApi -Exactly 2 -Scope It
         }
 
-        It 'should call Show-Warning when OrgUnitID is used' {
-            $null = Get-NcentralDevices -All -OrgUnitID 999
-            Assert-MockCalled Show-Warning -Exactly 1 -Scope It
-        }
     }
 
     Context 'SortOrder normalization' {

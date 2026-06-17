@@ -59,7 +59,6 @@ This example fetches all N-Central devices that match with filter ID 38225172
 
     if ($PSBoundParameters.ContainsKey('OrgUnitID')) {
         $uri = "$script:BaseUrl/api/org-units/$OrgUnitID/devices"
-        Show-Warning
     }
     else {
         $uri = "$script:BaseUrl/api/devices"

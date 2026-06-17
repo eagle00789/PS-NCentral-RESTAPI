@@ -32,12 +32,9 @@ This example fetches the RegistrationToken for a site with SiteID 1234.
         [Parameter(Mandatory = $true, ParameterSetName = 'Organisation')]
         [int]$OrganisationID
     )
-
-    Show-Warning
-
     switch ($PSCmdlet.ParameterSetName) {
-        'Site'        { $uri = "$script:BaseUrl/api/sites/$SiteID/registration-token" }
-        'Customer'    { $uri = "$script:BaseUrl/api/customers/$CustomerID/registration-token" }
+        'Site'        { Show-Warning; $uri = "$script:BaseUrl/api/sites/$SiteID/registration-token" }
+        'Customer'    { Show-Warning; $uri = "$script:BaseUrl/api/customers/$CustomerID/registration-token" }
         'Organisation'{ $uri = "$script:BaseUrl/api/org-units/$OrganisationID/registration-token" }
         default       { Write-Error "No parameter specified" }
     }
