@@ -64,6 +64,15 @@ Describe "Connect-Ncentral" {
             } -Times 1
         }
 
+        It "Adds expiry override headers when provided" {
+            $null = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com" -AccessExpiryOverride "30m" -RefreshExpiryOverride "7d"
+
+            Assert-MockCalled Invoke-RestMethod -ParameterFilter {
+                $Headers["X-ACCESS-EXPIRY-OVERRIDE"] -eq "30m" -and
+                $Headers["X-REFRESH-EXPIRY-OVERRIDE"] -eq "7d"
+            } -Times 1
+        }
+
         It "Calls Get-NcentralApiServerInfo once" {
             $null = Connect-Ncentral -JwtToken "abc123" -BaseUrl "ncentral.example.com"
             Assert-MockCalled Get-NcentralApiServerInfo -Times 1

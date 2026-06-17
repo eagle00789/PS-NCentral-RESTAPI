@@ -18,6 +18,12 @@ Optional. Sets how many items should be fetched per page. Defaults to 50 if not 
 .PARAMETER All
 Optional. If specified, retrieves all active issues across all pages.
 
+.PARAMETER Select
+Optional. Specifies a comma-separated list of fields to return.
+
+.PARAMETER SortBy
+Optional. Specifies the field on which to sort the results.
+
 .PARAMETER SortOrder
 Optional. Specifies the sort order of the results. Valid case-insensitive input is asc, ascending, desc, descending, natural, reverse
 
@@ -42,6 +48,12 @@ This example fetches all active issues for a customer with ID 50
         [switch]$All,
 
         [Parameter(Mandatory = $false)]
+        [string]$Select,
+
+        [Parameter(Mandatory = $false)]
+        [string]$SortBy,
+
+        [Parameter(Mandatory = $false)]
         [ValidateSet("asc", "ascending", "desc", "descending", "natural", "reverse")]
         [string]$SortOrder
     )
@@ -54,6 +66,12 @@ This example fetches all active issues for a customer with ID 50
             if ($PSBoundParameters.ContainsKey('SortOrder')) {
                 $uri = "$uri&sortOrder=$SortOrder"
             }
+            if ($PSBoundParameters.ContainsKey('SortBy')) {
+                $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
+            }
             $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
             if (-not $RawData) { return $null }
             $Pages = $RawData.totalPages
@@ -64,6 +82,12 @@ This example fetches all active issues for a customer with ID 50
                 if ($PSBoundParameters.ContainsKey('SortOrder')) {
                     $uri = "$uri&sortOrder=$SortOrder"
                 }
+                if ($PSBoundParameters.ContainsKey('SortBy')) {
+                    $uri = "$uri&sortBy=$SortBy"
+                }
+                if ($PSBoundParameters.ContainsKey('Select')) {
+                    $uri = "$uri&select=$Select"
+                }
                 $Data.AddRange((Invoke-NcentralApi -Uri $uri -Method "GET").data)
             }
             return $Data
@@ -72,6 +96,12 @@ This example fetches all active issues for a customer with ID 50
             $uri = "$script:BaseUrl/api/org-units/$CustomerID/active-issues?pageNumber=$PageNumber&pageSize=$PageSize"
             if ($PSBoundParameters.ContainsKey('SortOrder')) {
                 $uri = "$uri&sortOrder=$SortOrder"
+            }
+            if ($PSBoundParameters.ContainsKey('SortBy')) {
+                $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
             }
             return (Invoke-NcentralApi -Uri $uri -Method "GET").data
         }

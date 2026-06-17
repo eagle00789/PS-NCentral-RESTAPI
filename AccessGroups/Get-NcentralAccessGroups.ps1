@@ -18,6 +18,12 @@ Optional. Specifies the number of Access Groups to retrieve per page. Defaults t
 .PARAMETER All
 Optional. If specified, retrieves all Access Groups across all pages
 
+.PARAMETER Select
+Optional. Specifies a comma-separated list of fields to return.
+
+.PARAMETER SortBy
+Optional. Specifies the field on which to sort the results.
+
 .PARAMETER SortOrder
 Optional. Specifies the sort order of the results. Valid case-insensitive input is asc, ascending, desc, descending
 
@@ -42,7 +48,13 @@ This example fetches all N-Central Access Groups for a customer with ID 50
         [switch]$All,
 
         [Parameter(Mandatory = $false)]
-        [ValidateSet("asc", "ascending", "desc", "descending", "neutral", "reverse")]
+        [string]$Select,
+
+        [Parameter(Mandatory = $false)]
+        [string]$SortBy,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("asc", "ascending", "desc", "descending", "natural", "reverse")]
         [string]$SortOrder
     )
     if ($PSBoundParameters.ContainsKey('SortOrder')) {
@@ -54,6 +66,12 @@ This example fetches all N-Central Access Groups for a customer with ID 50
             if ($PSBoundParameters.ContainsKey('SortOrder')) {
                 $uri = "$uri&sortOrder=$SortOrder"
             }
+            if ($PSBoundParameters.ContainsKey('SortBy')) {
+                $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
+            }
             $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
             $Pages = $RawData.totalPages
             $Data = New-Object System.Collections.Generic.List[Object]
@@ -63,6 +81,12 @@ This example fetches all N-Central Access Groups for a customer with ID 50
                 if ($PSBoundParameters.ContainsKey('SortOrder')) {
                     $uri = "$uri&sortOrder=$SortOrder"
                 }
+                if ($PSBoundParameters.ContainsKey('SortBy')) {
+                    $uri = "$uri&sortBy=$SortBy"
+                }
+                if ($PSBoundParameters.ContainsKey('Select')) {
+                    $uri = "$uri&select=$Select"
+                }
                 $Data.AddRange((Invoke-NcentralApi -Uri $uri -Method "GET").data)
             }
             return $Data
@@ -71,6 +95,12 @@ This example fetches all N-Central Access Groups for a customer with ID 50
             $uri = "$script:BaseUrl/api/org-units/$orgUnitID/access-groups?pageNumber=$PageNumber&pageSize=$PageSize"
             if ($PSBoundParameters.ContainsKey('SortOrder')) {
                 $uri = "$uri&sortOrder=$SortOrder"
+            }
+            if ($PSBoundParameters.ContainsKey('SortBy')) {
+                $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
             }
             return (Invoke-NcentralApi -Uri $uri -Method "GET").data
         }

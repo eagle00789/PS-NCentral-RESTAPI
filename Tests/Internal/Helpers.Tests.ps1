@@ -20,6 +20,22 @@ Describe "Invoke-NcentralApi" {
             }
         }
 
+        It "Merges additional headers into the request" {
+            $script:CapturedHeaders = $null
+            Mock Invoke-RestMethod {
+                $script:CapturedHeaders = $Headers
+                return @{ success = $true }
+            }
+
+            $null = Invoke-NcentralApi -Uri "https://server/api/test" -Method "GET" -Headers @{
+                "X-ACCESS-EXPIRY-OVERRIDE" = "30m"
+            }
+
+            Assert-MockCalled Invoke-RestMethod -Times 1
+            $script:CapturedHeaders["Authorization"] | Should -Be "Bearer dummyAccess"
+            $script:CapturedHeaders["X-ACCESS-EXPIRY-OVERRIDE"] | Should -Be "30m"
+        }
+
         It "Appends encoded query parameters to Uri" {
             $script:CapturedUri = $null
             Mock Invoke-RestMethod {

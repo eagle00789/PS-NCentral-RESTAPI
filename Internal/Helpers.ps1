@@ -7,6 +7,7 @@ function Invoke-NcentralApi {
         [string] $Method,
         [object] $Body = $null,
         [hashtable] $Query = $null,
+        [hashtable] $Headers = $null,
         [boolean] $ConvertToJson = $True
     )
 
@@ -15,7 +16,12 @@ function Invoke-NcentralApi {
             throw "Not connected to N-Central. Run Connect-Ncentral before calling an API endpoint."
         }
 
-        $headers = @{ Authorization = "Bearer $script:AccessToken" }
+        $requestHeaders = @{ Authorization = "Bearer $script:AccessToken" }
+        if ($Headers) {
+            foreach ($key in @($Headers.Keys)) {
+                $requestHeaders[$key] = $Headers[$key]
+            }
+        }
 
         if ($Query) {
             $queryString = ($Query.GetEnumerator() |
@@ -33,12 +39,12 @@ function Invoke-NcentralApi {
 
         if ($Body -ne $null) {
             if ($ConvertToJson) {
-                $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers -Body ($Body | ConvertTo-Json -Depth 10) -ContentType "application/json"
+                $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $requestHeaders -Body ($Body | ConvertTo-Json -Depth 10) -ContentType "application/json"
             } else {
-                $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers -Body $Body -ContentType "text/plain"
+                $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $requestHeaders -Body $Body -ContentType "text/plain"
             }
         } else {
-            $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $headers
+            $response = Invoke-RestMethod -Uri $Uri -Method $Method -Headers $requestHeaders
         }
 
         return $response

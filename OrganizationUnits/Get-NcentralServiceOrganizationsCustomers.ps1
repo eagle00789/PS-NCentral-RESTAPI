@@ -18,6 +18,12 @@ Optional. Specifies the number of Customers unders a specific Service Organizati
 .PARAMETER All
 Optional. If specified, retrieves all Customers under a specific Service Organization ID across all pages
 
+.PARAMETER Select
+Optional. Specifies a comma-separated list of fields to return.
+
+.PARAMETER SortBy
+Optional. Specifies the field on which to sort the results.
+
 .PARAMETER SortOrder
 Optional. Specifies the sort order of the results. Valid case-insensitive input is asc, ascending, desc, descending, natural, reverse
 
@@ -42,6 +48,12 @@ This example fetches all N-Central Service Organization
         [switch]$All,
 
         [Parameter(Mandatory = $false)]
+        [string]$Select,
+
+        [Parameter(Mandatory = $false)]
+        [string]$SortBy,
+
+        [Parameter(Mandatory = $false)]
         [ValidateSet("asc", "ascending", "desc", "descending", "natural", "reverse")]
         [string]$SortOrder
     )
@@ -51,27 +63,45 @@ This example fetches all N-Central Service Organization
     }
     switch ($PsCmdlet.ParameterSetName) {
         'All' {
-            $uri = "$script:BaseUrl/api/service-orgs/$ServiceOrganisationID/customers?pageNumber=$PageNumber&pageSize=$PageSize"
+            $uri = "$script:BaseUrl/api/service-orgs/$ServiceOrganizationID/customers?pageNumber=$PageNumber&pageSize=$PageSize"
             if ($PSBoundParameters.ContainsKey('SortOrder')) {
                 $uri = "$uri&sortOrder=$SortOrder"
+            }
+            if ($PSBoundParameters.ContainsKey('SortBy')) {
+                $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
             }
             $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
             $Pages = $RawData.totalPages
             $Data = New-Object System.Collections.Generic.List[Object]
             $Data.AddRange($RawData.data)
             For ($PageNumber = 2; $PageNumber -le $Pages; $PageNumber++) {
-                $uri = "$script:BaseUrl/api/service-orgs/$ServiceOrganisationID/customers?pageNumber=$PageNumber&pageSize=$PageSize"
+                $uri = "$script:BaseUrl/api/service-orgs/$ServiceOrganizationID/customers?pageNumber=$PageNumber&pageSize=$PageSize"
                 if ($PSBoundParameters.ContainsKey('SortOrder')) {
                     $uri = "$uri&sortOrder=$SortOrder"
+                }
+                if ($PSBoundParameters.ContainsKey('SortBy')) {
+                    $uri = "$uri&sortBy=$SortBy"
+                }
+                if ($PSBoundParameters.ContainsKey('Select')) {
+                    $uri = "$uri&select=$Select"
                 }
                 $Data.AddRange((Invoke-NcentralApi -Uri $uri -Method "GET").data)
             }
             return $Data
         }
         'Paged' {
-            $uri = "$script:BaseUrl/api/service-orgs/$ServiceOrganisationID/customers?pageNumber=$PageNumber&pageSize=$PageSize"
+            $uri = "$script:BaseUrl/api/service-orgs/$ServiceOrganizationID/customers?pageNumber=$PageNumber&pageSize=$PageSize"
             if ($PSBoundParameters.ContainsKey('SortOrder')) {
                 $uri = "$uri&sortOrder=$SortOrder"
+            }
+            if ($PSBoundParameters.ContainsKey('SortBy')) {
+                $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
             }
             return (Invoke-NcentralApi -Uri $uri -Method "GET").data
         }

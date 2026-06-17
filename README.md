@@ -64,7 +64,6 @@ Category breakdown:
 
 Nearly all non-link endpoints currently exposed by the live API Explorer are now built into this module.
 The current exception is `POST /api/devices/maintenance-windows`, which remains unfinished and is therefore not exported at this time.
-Some paged endpoints still do not expose every optional explorer parameter such as `select`.
 
 ## Recently Added Endpoints
 

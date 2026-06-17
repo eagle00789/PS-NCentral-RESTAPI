@@ -15,6 +15,12 @@ Optional. Specifies the number of Service Organizations to retrieve per page. De
 .PARAMETER All
 Optional. If specified, retrieves all Service Organizations across all pages
 
+.PARAMETER Select
+Optional. Specifies a comma-separated list of fields to return.
+
+.PARAMETER SortBy
+Optional. Specifies the field on which to sort the results.
+
 .PARAMETER SortOrder
 Optional. Specifies the sort order of the results. Valid case-insensitive input is asc, ascending, desc, descending, natural, reverse
 
@@ -36,6 +42,12 @@ This example fetches all N-Central Service Organizations
         [switch]$All,
 
         [Parameter(Mandatory = $false)]
+        [string]$Select,
+
+        [Parameter(Mandatory = $false)]
+        [string]$SortBy,
+
+        [Parameter(Mandatory = $false)]
         [ValidateSet("asc", "ascending", "desc", "descending", "natural", "reverse")]
         [string]$SortOrder
     )
@@ -49,6 +61,12 @@ This example fetches all N-Central Service Organizations
             if ($PSBoundParameters.ContainsKey('SortOrder')) {
                 $uri = "$uri&sortOrder=$SortOrder"
             }
+            if ($PSBoundParameters.ContainsKey('SortBy')) {
+                $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
+            }
             $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
             $Pages = $RawData.totalPages
             $Data = New-Object System.Collections.Generic.List[Object]
@@ -58,6 +76,12 @@ This example fetches all N-Central Service Organizations
                 if ($PSBoundParameters.ContainsKey('SortOrder')) {
                     $uri = "$uri&sortOrder=$SortOrder"
                 }
+                if ($PSBoundParameters.ContainsKey('SortBy')) {
+                    $uri = "$uri&sortBy=$SortBy"
+                }
+                if ($PSBoundParameters.ContainsKey('Select')) {
+                    $uri = "$uri&select=$Select"
+                }
                 $Data.AddRange((Invoke-NcentralApi -Uri $uri -Method "GET").data)
             }
             return $Data
@@ -66,6 +90,12 @@ This example fetches all N-Central Service Organizations
             $uri = "$script:BaseUrl/api/service-orgs?pageNumber=$PageNumber&pageSize=$PageSize"
             if ($PSBoundParameters.ContainsKey('SortOrder')) {
                 $uri = "$uri&sortOrder=$SortOrder"
+            }
+            if ($PSBoundParameters.ContainsKey('SortBy')) {
+                $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
             }
             return (Invoke-NcentralApi -Uri $uri -Method "GET").data
         }

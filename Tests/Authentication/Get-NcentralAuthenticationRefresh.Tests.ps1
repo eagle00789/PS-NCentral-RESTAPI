@@ -33,7 +33,17 @@ Describe "Get-NcentralAuthenticationRefresh" {
                 $Uri -eq "https://fake-ncentral.test/api/auth/refresh" -and
                 $Method -eq "POST" -and
                 $Body -eq "fake-refresh-token" -and
+                $Headers.Count -eq 0 -and
                 -not $ConvertToJson
+            }
+        }
+
+        It "passes expiry override headers when provided" {
+            Get-NcentralAuthenticationRefresh -AccessExpiryOverride "30m" -RefreshExpiryOverride "7d"
+
+            Should -Invoke Invoke-NcentralApi -Times 1 -Exactly -ParameterFilter {
+                $Headers["X-ACCESS-EXPIRY-OVERRIDE"] -eq "30m" -and
+                $Headers["X-REFRESH-EXPIRY-OVERRIDE"] -eq "7d"
             }
         }
 

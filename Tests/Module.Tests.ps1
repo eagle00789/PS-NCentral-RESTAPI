@@ -8,9 +8,9 @@ Describe "PS-NCentral-RESTAPI module" {
         Remove-Module PS-NCentral-RESTAPI -Force -ErrorAction SilentlyContinue
     }
 
-    It "exports the maintenance window command" {
-        Get-Command New-NcentralMaintenanceWindow -Module PS-NCentral-RESTAPI |
-            Should -Not -BeNullOrEmpty
+    It "does not export the maintenance window create command while it remains unfinished" {
+        Get-Command New-NcentralMaintenanceWindow -Module PS-NCentral-RESTAPI -ErrorAction SilentlyContinue |
+            Should -BeNullOrEmpty
     }
 
     It "does not expose internal helper functions" {

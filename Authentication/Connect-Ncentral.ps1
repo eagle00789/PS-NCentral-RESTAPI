@@ -12,6 +12,12 @@ Required. Defines the JWT Token used for authorization to the API
 .PARAMETER BaseUrl
 Required. To which URL are we connecting to
 
+.PARAMETER AccessExpiryOverride
+Optional. Overrides the access token expiry using values like 120s, 30m or 1h
+
+.PARAMETER RefreshExpiryOverride
+Optional. Overrides the refresh token expiry using values like 120s, 30m or 1h
+
 .EXAMPLE
 Connect-Ncentral -JwtToken as34789kjasndcv9813247891234asjkldv.qwuiop1237894jfvhqwiop2973 -BaseUrl ncentral.example.com
 
@@ -21,14 +27,22 @@ This will connect to the NCentral server hosted on ncentral.example.com using th
     [cmdletbinding()]
 	param (
         [Parameter(Mandatory)] [string] $JwtToken,
-        [Parameter(Mandatory)] [string] $BaseUrl
+        [Parameter(Mandatory)] [string] $BaseUrl,
+        [Parameter(Mandatory = $false)] [string] $AccessExpiryOverride,
+        [Parameter(Mandatory = $false)] [string] $RefreshExpiryOverride
     )
 
     try {
-		$BaseUrl = 'https://' + ($BaseUrl -replace '^.*://', '')
+        $BaseUrl = 'https://' + ($BaseUrl -replace '^.*://', '')
         $normalizedBaseUrl = $BaseUrl.TrimEnd('/')
         $uri = "$normalizedBaseUrl/api/auth/authenticate"
         $headers = @{ Authorization = "Bearer $JwtToken" }
+        if ($PSBoundParameters.ContainsKey('AccessExpiryOverride')) {
+            $headers['X-ACCESS-EXPIRY-OVERRIDE'] = $AccessExpiryOverride
+        }
+        if ($PSBoundParameters.ContainsKey('RefreshExpiryOverride')) {
+            $headers['X-REFRESH-EXPIRY-OVERRIDE'] = $RefreshExpiryOverride
+        }
         $response = Invoke-RestMethod -Uri $uri -Method Post -Headers $headers
 
         if ([string]::IsNullOrWhiteSpace($response.tokens.access.token) -or

@@ -21,6 +21,12 @@ Optional. Specifies the number of users to retrieve per page. Defaults to 50 if 
 .PARAMETER All
 Optional. If specified, retrieves all users across all pages
 
+.PARAMETER Select
+Optional. Specifies a comma-separated list of fields to return.
+
+.PARAMETER SortBy
+Optional. Specifies the field on which to sort the results.
+
 .PARAMETER SortOrder
 Optional. Specifies the sort order of the results. Valid case-insensitive input is asc, ascending, desc, descending, natural, reverse
 
@@ -48,6 +54,12 @@ This example fetches all N-Central devices that match with filter ID 38225172
         [switch]$All,
 
         [Parameter(Mandatory = $false)]
+        [string]$Select,
+
+        [Parameter(Mandatory = $false)]
+        [string]$SortBy,
+
+        [Parameter(Mandatory = $false)]
         [ValidateSet("asc", "ascending", "desc", "descending", "natural", "reverse")]
         [string]$SortOrder
     )
@@ -70,6 +82,12 @@ This example fetches all N-Central devices that match with filter ID 38225172
     }
     if ($PSBoundParameters.ContainsKey('SortOrder')) {
         $query.sortOrder = $SortOrder
+    }
+    if ($PSBoundParameters.ContainsKey('SortBy')) {
+        $query.sortBy = $SortBy
+    }
+    if ($PSBoundParameters.ContainsKey('Select')) {
+        $query.select = $Select
     }
     if ($PSBoundParameters.ContainsKey('FilterID')) {
         $query.filterId = $FilterID

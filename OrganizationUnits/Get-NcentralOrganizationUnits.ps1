@@ -15,6 +15,9 @@ Optional. Specifies the number of Organization Units to retrieve per page. Defau
 .PARAMETER All
 Optional. If specified, retrieves all Organization Units across all pages
 
+.PARAMETER Select
+Optional. Specifies a comma-separated list of fields to return.
+
 .PARAMETER SortBy
 Optional. Specifies the field on which to sort the results.
 
@@ -39,6 +42,9 @@ This example fetches all N-Central Organization Units
         [switch]$All,
 
         [Parameter(Mandatory = $false)]
+        [string]$Select,
+
+        [Parameter(Mandatory = $false)]
         [string]$SortBy,
 
         [Parameter(Mandatory = $false)]
@@ -58,6 +64,9 @@ This example fetches all N-Central Organization Units
             if ($PSBoundParameters.ContainsKey('SortBy')) {
                 $uri = "$uri&sortBy=$SortBy"
             }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
+            }
             $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
             $Pages = $RawData.totalPages
             $Data = New-Object System.Collections.Generic.List[Object]
@@ -71,6 +80,9 @@ This example fetches all N-Central Organization Units
                 }
                 if ($PSBoundParameters.ContainsKey('SortBy')) {
                     $uri = "$uri&sortBy=$SortBy"
+                }
+                if ($PSBoundParameters.ContainsKey('Select')) {
+                    $uri = "$uri&select=$Select"
                 }
                 $pageData = (Invoke-NcentralApi -Uri $uri -Method "GET").data
                 if ($pageData) {
@@ -86,6 +98,9 @@ This example fetches all N-Central Organization Units
             }
             if ($PSBoundParameters.ContainsKey('SortBy')) {
                 $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
             }
             return (Invoke-NcentralApi -Uri $uri -Method "GET").data
         }

@@ -18,6 +18,9 @@ Optional. Specifies the number of sites to retrieve per page. Defaults to 50 if 
 .PARAMETER All
 Optional. If specified, retrieves all sites across all pages
 
+.PARAMETER Select
+Optional. Specifies a comma-separated list of fields to return.
+
 .PARAMETER SortBy
 Optional. Specifies the field on which to sort the results. Valid case-insensitive input is siteId, siteName, parentId, externalId, externalId2, phone, contactTitle, contactFirstName, contactLastName, contactEmail, contactPhone, contactPhoneExt, contactDepartment, street1, street2, city, stateProv, country, county, postalCode
 
@@ -45,6 +48,9 @@ This example fetches all N-Central sites
         [switch]$All,
 
         [Parameter(Mandatory = $false)]
+        [string]$Select,
+
+        [Parameter(Mandatory = $false)]
         [ValidateSet("siteId", "siteName", "parentId", "externalId", "externalId2", "phone", "contactTitle", "contactFirstName", "contactLastName", "contactEmail", "contactPhone", "contactPhoneExt", "contactDepartment", "street1", "street2", "city", "stateProv", "country", "county", "postalCode")]
         [string]$SortBy,
 
@@ -67,6 +73,9 @@ This example fetches all N-Central sites
             if ($PSBoundParameters.ContainsKey('SortBy')) {
                 $uri = "$uri&sortBy=$SortBy"
             }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
+            }
             $RawData = Invoke-NcentralApi -Uri $uri -Method "GET"
             $Pages = $RawData.totalPages
             $Data = New-Object System.Collections.Generic.List[Object]
@@ -80,6 +89,9 @@ This example fetches all N-Central sites
                 }
                 if ($PSBoundParameters.ContainsKey('SortBy')) {
                     $uri = "$uri&sortBy=$SortBy"
+                }
+                if ($PSBoundParameters.ContainsKey('Select')) {
+                    $uri = "$uri&select=$Select"
                 }
                 $pageData = (Invoke-NcentralApi -Uri $uri -Method "GET").data
                 if ($pageData) {
@@ -95,6 +107,9 @@ This example fetches all N-Central sites
             }
             if ($PSBoundParameters.ContainsKey('SortBy')) {
                 $uri = "$uri&sortBy=$SortBy"
+            }
+            if ($PSBoundParameters.ContainsKey('Select')) {
+                $uri = "$uri&select=$Select"
             }
             return (Invoke-NcentralApi -Uri $uri -Method "GET").data
         }
